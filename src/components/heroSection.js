@@ -1,13 +1,7 @@
 import owensIcon from '../assets/owens.png';
 export default function HeroSection() {
   return (
-    <section className="relative bg-[#1a132f] text-white min-h-screen flex flex-col items-center justify-center text-center px-4">
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-20 h-20 rounded-full border-4 border-purple-400 opacity-20"></div>
-        <div className="absolute bottom-10 right-16 w-16 h-16 bg-purple-700 rounded-lg rotate-45 opacity-10"></div>
-        <div className="absolute top-1/2 left-1/4 w-32 h-1 bg-purple-600 opacity-10 rotate-12"></div>
-        <div className="absolute bottom-24 left-1/2 w-10 h-10 border-2 border-purple-300 rounded-full opacity-15"></div>
-      </div>
+    <section className="relative bg-[#1a132f] text-white py-32 flex flex-col items-center justify-center text-center px-4  border-b border-gray-700">
       <div className="z-10 max-w-2xl">
         <img src={owensIcon} alt="Owens Bot" className="w-24 h-24 mx-auto mb-6" />
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Owens Bot</h1>
