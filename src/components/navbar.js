@@ -9,7 +9,7 @@ export default function Navbar() {
                 <span className="font-extrabold text-2xl">Owens-Bot</span>
             </Link>
             <div className="ml-auto flex gap-8 text-lg font-semibold">
-                <Link to="/commands">Docs</Link>
+                <Link to="/docs">Docs</Link>
                 <Link to="/faq">FAQ</Link>
                 <Link to="/faq">Invite</Link>
             </div>
