@@ -1,6 +1,6 @@
-import owensMatch from '../assets/match.png';
-import owensRanking from '../assets/ranking.png';
-import owensRate from '../assets/rate.png';
+import owensMatch from '../assets/images/match.png';
+import owensRanking from '../assets/images/ranking.png';
+import owensRate from '../assets/images/rate.png';
 
 export default function FeatureSection() {
     return (

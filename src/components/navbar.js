@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaDiscord, FaGithub } from 'react-icons/fa';
-import owensIcon from '../assets/owens.png';
+import owensIcon from '../assets/images/owens.png';
 
 export default function Navbar() {
     return (
@@ -14,7 +14,7 @@ export default function Navbar() {
                 <Link to="/docs" className="hover:text-red-400 transition">Docs</Link>
 
                 <a
-                    href="https://discord.gg/yourdiscordlink"
+                    href="https://discord.com/oauth2/authorize?client_id=1372312475533316190&permissions=19327576128&integration_type=0&scope=bot"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-red-400 transition"
@@ -24,7 +24,7 @@ export default function Navbar() {
                 </a>
 
                 <a
-                    href="https://github.com/yourgithubrepo"
+                    href="https://github.com/sudorios/owens-bot.git"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-red-400 transition"
