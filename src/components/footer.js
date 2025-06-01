@@ -1,23 +1,14 @@
 export default function FooterSection() {
     return (
-        <footer className="bg-[#111827] text-gray-400 py-10 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
-
-                <div className="text-white font-extrabold text-xl">
-                    Owens Bot
-                </div>
-
-                <nav className="flex space-x-6 text-sm">
-                    <a href="#features" className="hover:text-white transition-colors duration-200">Features</a>
-                    <a href="#commands" className="hover:text-white transition-colors duration-200">Commands</a>
-                    <a href="#donate" className="hover:text-white transition-colors duration-200">Donate</a>
-                    <a href="#contact" className="hover:text-white transition-colors duration-200">Contact</a>
-                </nav>
-            </div>
-
-            <div className="mt-8 text-center text-sm text-gray-500">
-                © {new Date().getFullYear()} Owens Bot. All rights reserved.
-            </div>
+        <footer className="w-full bg-[#111827] border-t border-[#1E293B] py-8 px-10 text-gray-400 text-sm flex flex-col sm:flex-row justify-between items-center">
+            <div className="mb-4 sm:mb-0 font-semibold text-white">Owens Bot</div>
+            <nav className="space-x-8 text-gray-400">
+                <a href="#features" className="hover:text-red-400 transition">Features</a>
+                <a href="#commands" className="hover:text-red-400 transition">Commands</a>
+                <a href="#donate" className="hover:text-red-400 transition">Donate</a>
+                <a href="#contact" className="hover:text-red-400 transition">Contact</a>
+            </nav>
+            <div className="mt-4 sm:mt-0 text-gray-500 text-xs">&copy; 2025 Owens Bot. All rights reserved.</div>
         </footer>
     );
 }
