@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { docsCategories } from '../data/docsData.js';
+import { docsCategories } from '../docs/docsData.js';
 import FooterSection from '../components/footer';
 
 export default function Docs() {
