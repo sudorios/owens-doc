@@ -5,7 +5,6 @@ import Help from "./GettingStarted/Help";
 import CreatePools from "./Pools/createPools";
 import Seasons from "./Pools/seasons";
 
-import Rate from "./Rate/CreateRate";
 import CreateRate from "./Rate/CreateRate";
 
 export const docsCategories = {
