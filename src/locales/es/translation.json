@@ -1,0 +1,11 @@
+{
+    "navbar": {
+        "docs": "Documentación"
+    },
+    "hero": {
+        "title": "Bienvenido a Owens",
+        "description": "Automatiza tus quinielas y combates.",
+        "start": "Empezar",
+        "more": "Leer más"
+    }
+}
