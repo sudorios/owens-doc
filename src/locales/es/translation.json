@@ -14,11 +14,11 @@
             "title": "Quinielas",
             "description": "Crea y gestiona quinielas fácilmente con Owens. Aquí tienes algunos comandos clave para manejar tus quinielas y eventos en tu servidor de Discord:",
             "commands": {
-                "createpool": "!createpool <nombre>: Crea una nueva quiniela para el servidor.",
-                "match": "!match <quiniela> <combate>: Publica un combate para que los usuarios apuesten usando emojis.",
-                "result": "!result <messageID> <emoji>: Establece el emoji ganador del combate.",
-                "finish": "!finish <quiniela>: Finaliza la quiniela, asigna puntos y muestra el ranking del evento.",
-                "ranking": "!ranking: Muestra el ranking global del servidor actual."
+                "createpool": "?createpool <nombre>: Crea una nueva quiniela para el servidor.",
+                "match": "?match <quiniela> <combate>: Publica un combate para que los usuarios apuesten usando emojis.",
+                "result": "?result <messageID> <emoji>: Establece el emoji ganador del combate.",
+                "finish": "?finish <quiniela>: Finaliza la quiniela, asigna puntos y muestra el ranking del evento.",
+                "ranking": "?ranking: Muestra el ranking global del servidor actual."
             }
         },
         "ranking": {
@@ -57,6 +57,153 @@
             "create_pools": "Crear Quinielas",
             "seasons": "Temporadas",
             "create_rate": "Crear Calificación"
+        },
+        "getting_started": {
+            "installation": {
+                "title": "Cómo Agregar el Bot a tu Servidor de Discord",
+                "steps": {
+                    "1": "Ve al enlace de invitación del bot:",
+                    "2": "Selecciona el servidor donde quieres agregarlo (requiere permisos de Administrador).",
+                    "3": "Autoriza los permisos solicitados para el funcionamiento adecuado.",
+                    "4": "Una vez agregado, escribe !help para verificar que el bot está activo."
+                },
+                "manual_installation": {
+                    "title": "Instalación Manual para Desarrolladores",
+                    "steps": {
+                        "1": "Clona el repositorio:",
+                        "2": "Instala las dependencias:",
+                        "3": "Configura el archivo .env con tu token y opciones.",
+                        "4": "Ejecuta el bot:"
+                    }
+                },
+                "support": {
+                    "text": "Si tienes preguntas, usa ?help o envíame un correo a"
+                }
+            },
+            "help": {
+                "title": "Comando de Ayuda (?help)",
+                "description": "El comando ?help muestra una lista de todos los comandos disponibles para el bot, junto con breves descripciones.",
+                "usage": "Uso:",
+                "additional_info": "Este comando ayuda a los nuevos usuarios a familiarizarse rápidamente con las capacidades del bot sin necesidad de leer la documentación completa."
+            }
+        },
+        "pools": {
+            "create_pools": {
+                "title": "¿Qué son las Quinielas?",
+                "description": "Las quinielas son grupos o concursos donde los usuarios realizan apuestas en próximos combates o partidos. Cada quiniela actúa como una competencia independiente con sus propios combates y participantes.",
+                "how_it_works": "Cómo Funcionan las Quinielas",
+                "steps": {
+                    "create": {
+                        "title": "Crear una Quiniela:",
+                        "command": "?createpool <nombre>",
+                        "description": "Este comando inicializa una nueva quiniela con el nombre dado.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?createpool SummerBrawl2025 crea una quiniela llamada \"SummerBrawl2025\" donde se pueden agregar combates y realizar apuestas."
+                        }
+                    },
+                    "add_matches": {
+                        "title": "Agregar Combates:",
+                        "command": "?match <quiniela> <combate>",
+                        "description": "Usa este comando para agregar combates a una quiniela específica.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?match SummerBrawl2025 Fight1 agrega un combate llamado \"Fight1\" a la quiniela \"SummerBrawl2025\"."
+                        }
+                    },
+                    "place_bets": {
+                        "title": "Realizar Apuestas:",
+                        "description": "Los participantes realizan apuestas en combates individuales dentro de una quiniela seleccionando su ganador predicho.",
+                        "note": "Las apuestas cuentan hacia los puntos totales del participante una vez que se finalizan los resultados."
+                    },
+                    "set_results": {
+                        "title": "Establecer Resultados:",
+                        "command": "?result <messageID> <emoji>",
+                        "description": "Después de que termina un combate, usa este comando para establecer el resultado oficial.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?result 123456789 👍 marca al luchador asociado con el emoji 👍 como ganador."
+                        }
+                    },
+                    "finish": {
+                        "title": "Finalizar la Quiniela:",
+                        "command": "?finish <quiniela>",
+                        "description": "Finaliza la quiniela, calcula los puntos y muestra las clasificaciones finales.",
+                        "note": "Usa esto una vez que todos los combates tengan resultados y no se acepten más apuestas."
+                    },
+                    "check_status": {
+                        "title": "Verificar Estado de la Quiniela:",
+                        "command": "?poolstatus",
+                        "description": "Muestra el estado actual de las quinielas.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?poolstatus muestra el estado en vivo y los detalles."
+                        }
+                    },
+                    "show_rankings": {
+                        "title": "Mostrar Clasificaciones:",
+                        "command": "?ranking",
+                        "description": "Muestra la clasificación global para la temporada actual.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?ranking muestra la clasificación de todos los participantes de la temporada actual."
+                        }
+                    },
+                    "show_global": {
+                        "title": "Mostrar Clasificación Global:",
+                        "command": "?global",
+                        "description": "Muestra la clasificación global a través de todas las temporadas.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?global muestra la tabla de clasificación general combinando todas las temporadas."
+                        }
+                    }
+                }
+            },
+            "seasons": {
+                "title": "Gestión de Temporadas",
+                "description": "Las temporadas agrupan múltiples quinielas a lo largo del tiempo, ayudando a rastrear clasificaciones y ganadores a través de diferentes períodos competitivos.",
+                "commands": {
+                    "finish_season": {
+                        "title": "Finalizar una Temporada:",
+                        "command": "?finishseason",
+                        "description": "Finaliza la temporada activa actual, registra al ganador y comienza una nueva automáticamente.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?finishseason cerrará la temporada actual (ej., global) y comenzará una nueva (ej., global2)."
+                        }
+                    },
+                    "view_past": {
+                        "title": "Ver Temporadas Anteriores:",
+                        "command": "?seasons",
+                        "description": "Muestra una lista de todas las temporadas anteriores y sus ganadores.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?seasons muestra un historial de cada temporada registrada y el mejor jugador de cada una."
+                        }
+                    },
+                    "global_ranking": {
+                        "title": "Clasificación Global:",
+                        "command": "?global",
+                        "description": "Muestra los puntos totales acumulados por cada usuario a través de todas las temporadas.",
+                        "example": {
+                            "title": "Ejemplo:",
+                            "text": "?global muestra la tabla de clasificación de todos los tiempos combinando todas las puntuaciones de temporada."
+                        }
+                    }
+                }
+            }
+        },
+        "rate": {
+            "create_rate": {
+                "title": "Calificar Combates",
+                "description": "Permite a los usuarios calificar combates fácilmente con Owens. Usa el comando ?rate para crear encuestas donde tu comunidad puede puntuar los combates de 1 a 5 estrellas, y ?viewrating para ver las calificaciones promedio y votos.",
+                "features": {
+                    "engagement": "Involucra a los usuarios permitiéndoles calificar combates de forma interactiva",
+                    "ratings": "Muestra calificaciones promedio para identificar los favoritos de los fans",
+                    "feedback": "Mejora la retroalimentación de eventos y la participación de la comunidad"
+                }
+            }
         }
     },
     "footer": {

@@ -13,37 +13,37 @@
     "features": {
         "title": "Why Choose Owens?",
         "pool": {
-            "title": "Pool",
-            "description": "Create and manage betting pools easily with Owens. Here are some key commands to handle your pools and events on your Discord server:",
+            "title": "Pools",
+            "description": "Create and manage pools easily with Owens. Here are some key commands to handle your pools and events in your Discord server:",
             "commands": {
-                "createpool": "!createpool <name>: Creates a new betting pool for the server.",
-                "match": "!match <pool> <fight>: Posts a match for users to bet on using emojis.",
-                "result": "!result <messageID> <emoji>: Sets the winning emoji for the match.",
-                "finish": "!finish <pool>: Finishes the betting pool, assigns points, and shows event rankings.",
-                "ranking": "!ranking: Shows the global ranking for the current server."
+                "createpool": "?createpool <name>: Creates a new pool for the server.",
+                "match": "?match <pool> <match>: Posts a match for users to bet using emojis.",
+                "result": "?result <messageID> <emoji>: Sets the winning emoji for the match.",
+                "finish": "?finish <pool>: Finishes the pool, assigns points and shows the event ranking.",
+                "ranking": "?ranking: Shows the global ranking for the current server."
             }
         },
         "ranking": {
             "title": "Ranking",
-            "description": "Keep track of the competition with Owens' ranking system. Use the !ranking command to view the global standings in your server and see who's leading the game.",
+            "description": "Keep track of the competition with Owens' ranking system. Use the !ranking command to see the global standings in your server and see who's leading the game.",
             "features": {
-                "display": "Displays updated global rankings automatically",
+                "display": "Shows automatically updated global rankings",
                 "competition": "Helps increase competitiveness and engagement",
                 "events": "Supports multiple simultaneous events"
             }
         },
         "rate": {
             "title": "Rate",
-            "description": "Let users rate matches easily with Owens. Use the !rate command to create polls where your community can score matches from 1 to 5 stars, and !viewrating to see average ratings and votes.",
+            "description": "Allow users to easily rate matches with Owens. Use the !rate command to create polls where your community can rate matches from 1 to 5 stars, and !viewrating to see average ratings and votes.",
             "features": {
                 "engagement": "Engages users by allowing them to rate matches interactively",
                 "ratings": "Shows average ratings to identify fan favorites",
-                "feedback": "Improves event feedback and community participation"
+                "feedback": "Improves event feedback and community engagement"
             }
         },
         "donate": {
             "title": "Donate",
-            "description": "Support the continuous development of Owens! Use the !donate command to see donation options or click the button below to contribute directly via Ko-fi.",
+            "description": "Support Owens' continued development! Use the !donate command to see donation options or click the button below to contribute directly through Ko-fi.",
             "button": "Support us on Ko-fi"
         }
     },
@@ -51,14 +51,161 @@
         "categories": {
             "getting_started": "Getting Started",
             "pools": "Pools",
-            "rate": "Rate"
+            "rate": "Ratings"
         },
         "sections": {
             "installation": "Installation",
             "help": "Help",
             "create_pools": "Create Pools",
             "seasons": "Seasons",
-            "create_rate": "Create Rate"
+            "create_rate": "Create Rating"
+        },
+        "getting_started": {
+            "installation": {
+                "title": "How to Add the Bot to Your Discord Server",
+                "steps": {
+                    "1": "Go to the bot's invite link:",
+                    "2": "Select the server where you want to add it (requires Admin permissions).",
+                    "3": "Authorize the permissions requested for proper functionality.",
+                    "4": "Once added, type ?help to verify the bot is active."
+                },
+                "manual_installation": {
+                    "title": "Manual Installation for Developers",
+                    "steps": {
+                        "1": "Clone the repository:",
+                        "2": "Install dependencies:",
+                        "3": "Set up the .env file with your token and options.",
+                        "4": "Run the bot:"
+                    }
+                },
+                "support": {
+                    "text": "If you have questions, use ?help or email me at"
+                }
+            },
+            "help": {
+                "title": "Help Command (?help)",
+                "description": "The ?help command displays a list of all available commands for the bot, along with brief descriptions.",
+                "usage": "Usage:",
+                "additional_info": "This command helps new users to get familiar with the bot's capabilities quickly without needing to read the full documentation."
+            }
+        },
+        "pools": {
+            "create_pools": {
+                "title": "What are Pools?",
+                "description": "Pools are groups or contests where users place bets on upcoming fights or matches. Each pool acts as an independent competition with its own fights and participants.",
+                "how_it_works": "How Pools Work",
+                "steps": {
+                    "create": {
+                        "title": "Create a Pool:",
+                        "command": "?createpool <name>",
+                        "description": "This command initializes a new pool with the given name.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?createpool SummerBrawl2025 creates a pool named \"SummerBrawl2025\" where fights can be added and bets placed."
+                        }
+                    },
+                    "add_matches": {
+                        "title": "Add Matches:",
+                        "command": "?match <pool> <fight>",
+                        "description": "Use this command to add fights to a specific pool.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?match SummerBrawl2025 Fight1 adds a fight named \"Fight1\" to the \"SummerBrawl2025\" pool."
+                        }
+                    },
+                    "place_bets": {
+                        "title": "Place Bets:",
+                        "description": "Participants place bets on individual fights within a pool by selecting their predicted winner.",
+                        "note": "Bets count towards the participant's total points once results are finalized."
+                    },
+                    "set_results": {
+                        "title": "Set Results:",
+                        "command": "?result <messageID> <emoji>",
+                        "description": "After a fight finishes, use this command to set the official result.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?result 123456789 👍 marks the fighter associated with the 👍 emoji as the winner."
+                        }
+                    },
+                    "finish": {
+                        "title": "Finish the Pool:",
+                        "command": "?finish <pool>",
+                        "description": "Ends the pool, calculates points, and shows final rankings.",
+                        "note": "Use this once all fights have results and no more bets will be accepted."
+                    },
+                    "check_status": {
+                        "title": "Check Pool Status:",
+                        "command": "?poolstatus",
+                        "description": "Displays the current status of the pools.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?poolstatus shows the live status and details."
+                        }
+                    },
+                    "show_rankings": {
+                        "title": "Show Rankings:",
+                        "command": "?ranking",
+                        "description": "Displays the global ranking for the current season.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?ranking shows the ranking of all participants from the current season."
+                        }
+                    },
+                    "show_global": {
+                        "title": "Show Global Ranking:",
+                        "command": "?rankinglobal",
+                        "description": "Displays the global ranking across all seasons.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?rankinglobal shows the overall leaderboard combining all seasons."
+                        }
+                    }
+                }
+            },
+            "seasons": {
+                "title": "Seasons Management",
+                "description": "Seasons group multiple pools over time, helping track rankings and winners across different competitive periods.",
+                "commands": {
+                    "finish_season": {
+                        "title": "Finish a Season:",
+                        "command": "?finishseason",
+                        "description": "Ends the current active season, registers the winner and begins a new one automatically.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?finishseason will close the current season (e.g., global) and start a new one (e.g., global2)."
+                        }
+                    },
+                    "view_past": {
+                        "title": "View Past Seasons:",
+                        "command": "?seasons",
+                        "description": "Displays a list of all past seasons and their winners.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?seasons shows a history of every recorded season and the top player of each."
+                        }
+                    },
+                    "global_ranking": {
+                        "title": "Global Ranking:",
+                        "command": "?global",
+                        "description": "Shows the total points accumulated by each user across all seasons.",
+                        "example": {
+                            "title": "Example:",
+                            "text": "?global displays the all-time leaderboard combining all season scores."
+                        }
+                    }
+                }
+            }
+        },
+        "rate": {
+            "create_rate": {
+                "title": "Rate Matches",
+                "description": "Let users rate matches easily with Owens. Use the ?rate command to create polls where your community can score matches from 1 to 5 stars, and ?viewrating to see average ratings and votes.",
+                "features": {
+                    "engagement": "Engages users by allowing them to rate matches interactively",
+                    "ratings": "Shows average ratings to identify fan favorites",
+                    "feedback": "Improves event feedback and community participation"
+                }
+            }
         }
     },
     "footer": {

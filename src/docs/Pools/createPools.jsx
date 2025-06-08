@@ -1,122 +1,115 @@
 import { FaLayerGroup } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function CreatePools() {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-6">
             <section className="bg-[#1E293B] p-5 rounded-lg shadow-md">
                 <h3 className="flex items-center text-xl font-semibold mb-3 text-red-400">
-                    <FaLayerGroup className="mr-2" /> What are Pools?
+                    <FaLayerGroup className="mr-2" /> {t('docs.pools.create_pools.title')}
                 </h3>
                 <p className="text-gray-300 mb-4">
-                    Pools are groups or contests where users place bets on upcoming fights
-                    or matches. Each pool acts as an independent competition with its own
-                    fights and participants.
+                    {t('docs.pools.create_pools.description')}
                 </p>
 
-                <h4 className="text-red-400 font-semibold mb-2">How Pools Work</h4>
+                <h4 className="text-red-400 font-semibold mb-2">{t('docs.pools.create_pools.how_it_works')}</h4>
                 <ul className="list-disc list-inside text-gray-300 space-y-4">
                     <li>
-                        <strong>Create a Pool:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.create.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?createpool &lt;name&gt;</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.create.command')}</code>
                         </strong>{" "}
-                        — This command initializes a new pool with the given name.
+                        — {t('docs.pools.create_pools.steps.create.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-blue-600 bg-blue-900/20 p-3 rounded text-blue-200">
-                            Example:
+                            {t('docs.pools.create_pools.steps.create.example.title')}
                             <br />
-                            <code>?createpool SummerBrawl2025</code> creates a pool named
-                            "SummerBrawl2025" where fights can be added and bets placed.
+                            <code>{t('docs.pools.create_pools.steps.create.example.text')}</code>
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Add Matches:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.add_matches.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?match &lt;pool&gt; &lt;fight&gt;</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.add_matches.command')}</code>
                         </strong>{" "}
-                        — Use this command to add fights to a specific pool.
+                        — {t('docs.pools.create_pools.steps.add_matches.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-green-600 bg-green-900/20 p-3 rounded text-green-200">
-                            Example:
+                            {t('docs.pools.create_pools.steps.add_matches.example.title')}
                             <br />
-                            <code>?match SummerBrawl2025 Fight1</code> adds a fight named
-                            "Fight1" to the "SummerBrawl2025" pool.
+                            <code>{t('docs.pools.create_pools.steps.add_matches.example.text')}</code>
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Place Bets:</strong>{" "}
-                        Participants place bets on individual fights within a pool by
-                        selecting their predicted winner.
+                        <strong>{t('docs.pools.create_pools.steps.place_bets.title')}</strong>{" "}
+                        {t('docs.pools.create_pools.steps.place_bets.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-yellow-600 bg-yellow-900/20 p-3 rounded text-yellow-300">
-                            Bets count towards the participant's total points once results are
-                            finalized.
+                            {t('docs.pools.create_pools.steps.place_bets.note')}
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Set Results:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.set_results.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?result &lt;messageID&gt; &lt;emoji&gt;</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.set_results.command')}</code>
                         </strong>{" "}
-                        — After a fight finishes, use this command to set the official result.
+                        — {t('docs.pools.create_pools.steps.set_results.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-pink-600 bg-pink-900/20 p-3 rounded text-pink-300">
-                            Example:
+                            {t('docs.pools.create_pools.steps.set_results.example.title')}
                             <br />
-                            <code>?result 123456789 👍</code> marks the fighter associated with
-                            the 👍 emoji as the winner.
+                            <code>{t('docs.pools.create_pools.steps.set_results.example.text')}</code>
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Finish the Pool:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.finish.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?finish &lt;pool&gt;</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.finish.command')}</code>
                         </strong>{" "}
-                        — Ends the pool, calculates points, and shows final rankings.
+                        — {t('docs.pools.create_pools.steps.finish.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-purple-600 bg-purple-900/20 p-3 rounded text-purple-300">
-                            Use this once all fights have results and no more bets will be
-                            accepted.
+                            {t('docs.pools.create_pools.steps.finish.note')}
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Check Pool Status:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.check_status.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?poolstatus</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.check_status.command')}</code>
                         </strong>{" "}
-                        — Displays the current status of the pools.
+                        — {t('docs.pools.create_pools.steps.check_status.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-teal-600 bg-teal-900/20 p-3 rounded text-teal-200">
-                            Example:
+                            {t('docs.pools.create_pools.steps.check_status.example.title')}
                             <br />
-                            <code>?poolstatus</code> shows the live status and details.
+                            <code>{t('docs.pools.create_pools.steps.check_status.example.text')}</code>
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Show Rankings:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.show_rankings.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?ranking</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.show_rankings.command')}</code>
                         </strong>{" "}
-                        — Displays the global ranking for the current season.
+                        — {t('docs.pools.create_pools.steps.show_rankings.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-orange-600 bg-orange-900/20 p-3 rounded text-orange-300">
-                            Example:
+                            {t('docs.pools.create_pools.steps.show_rankings.example.title')}
                             <br />
-                            <code>!ranking</code> shows the ranking of all participants from
-                            the current season.
+                            <code>{t('docs.pools.create_pools.steps.show_rankings.example.text')}</code>
                         </blockquote>
                     </li>
 
                     <li>
-                        <strong>Show Global Ranking:</strong>{" "}
+                        <strong>{t('docs.pools.create_pools.steps.show_global.title')}</strong>{" "}
                         <strong>
-                            <code className="bg-[#334155] px-1 rounded">?rankinglobal</code>
+                            <code className="bg-[#334155] px-1 rounded">{t('docs.pools.create_pools.steps.show_global.command')}</code>
                         </strong>{" "}
-                        — Displays the global ranking across all seasons.
+                        — {t('docs.pools.create_pools.steps.show_global.description')}
                         <blockquote className="mt-3 ml-6 border-l-4 border-orange-600 bg-orange-900/20 p-3 rounded text-orange-300">
-                            Example:
+                            {t('docs.pools.create_pools.steps.show_global.example.title')}
                             <br />
-                            <code>!rankinglobal</code> shows the overall leaderboard combining
-                            all seasons.
+                            <code>{t('docs.pools.create_pools.steps.show_global.example.text')}</code>
                         </blockquote>
                     </li>
                 </ul>

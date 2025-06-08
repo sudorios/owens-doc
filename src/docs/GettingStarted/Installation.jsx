@@ -1,15 +1,18 @@
 import { FaDiscord, FaDownload, FaQuestionCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 export default function Installation() {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-6">
             <section className="bg-[#1E293B] p-5 rounded-lg shadow-md">
                 <h3 className="flex items-center text-xl font-semibold mb-3 text-red-400">
-                    <FaDiscord className="mr-2" /> How to Add the Bot to Your Discord Server
+                    <FaDiscord className="mr-2" /> {t('docs.getting_started.installation.title')}
                 </h3>
                 <ol className="list-decimal list-inside text-gray-300 space-y-2">
                     <li>
-                        Go to the bot’s invite link:{" "}
+                        {t('docs.getting_started.installation.steps.1')}{" "}
                         <a
                             href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=PERMISSIONS"
                             target="_blank"
@@ -19,33 +22,35 @@ export default function Installation() {
                             Invite Bot
                         </a>
                     </li>
-                    <li>Select the server where you want to add it (requires Admin permissions).</li>
-                    <li>Authorize the permissions requested for proper functionality.</li>
+                    <li>{t('docs.getting_started.installation.steps.2')}</li>
+                    <li>{t('docs.getting_started.installation.steps.3')}</li>
                     <li>
-                        Once added, type <code className="bg-[#334155] px-1 rounded">!help</code> to verify the bot is active.
+                        {t('docs.getting_started.installation.steps.4')}
                     </li>
                 </ol>
             </section>
 
             <section className="bg-[#1E293B] p-5 rounded-lg shadow-md">
                 <h3 className="flex items-center text-xl font-semibold mb-3 text-red-400">
-                    <FaDownload className="mr-2" /> Manual Installation for Developers
+                    <FaDownload className="mr-2" /> {t('docs.getting_started.installation.manual_installation.title')}
                 </h3>
                 <ol className="list-decimal list-inside text-gray-300 space-y-2">
                     <li>
-                        Clone the repository:{" "}
+                        {t('docs.getting_started.installation.manual_installation.steps.1')}{" "}
                         <code className="bg-[#334155] px-1 rounded">
                             git clone https://github.com/sudorios/owens-bot.git
                         </code>
                     </li>
                     <li>
-                        Install dependencies: <code className="bg-[#334155] px-1 rounded">npm install</code>
+                        {t('docs.getting_started.installation.manual_installation.steps.2')}{" "}
+                        <code className="bg-[#334155] px-1 rounded">npm install</code>
                     </li>
                     <li>
-                        Set up the <code className="bg-[#334155] px-1 rounded">.env</code> file with your token and options.
+                        {t('docs.getting_started.installation.manual_installation.steps.3')}
                     </li>
                     <li>
-                        Run the bot: <code className="bg-[#334155] px-1 rounded">npm start</code>
+                        {t('docs.getting_started.installation.manual_installation.steps.4')}{" "}
+                        <code className="bg-[#334155] px-1 rounded">npm start</code>
                     </li>
                 </ol>
             </section>
@@ -53,7 +58,7 @@ export default function Installation() {
             <section className="bg-[#1E293B] p-5 rounded-lg shadow-md flex items-center text-gray-400">
                 <FaQuestionCircle className="mr-3 text-red-500" size={28} />
                 <p>
-                    If you have questions, use <code className="bg-[#334155] px-1 rounded">!help</code> or email me at{" "}
+                    {t('docs.getting_started.installation.support.text')}{" "}
                     <a href="mailto:tuemail@gmail.com" className="text-red-400 underline">
                         tuemail@gmail.com
                     </a>
