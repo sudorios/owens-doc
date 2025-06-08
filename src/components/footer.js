@@ -9,7 +9,7 @@ export default function FooterSection() {
             <nav className="space-x-8 text-gray-400">
                 <a href="/docs" className="hover:text-red-400 transition">{t('footer.commands')}</a>
                 <a href="https://ko-fi.com/danniel_" className="hover:text-red-400 transition">{t('footer.donate')}</a>
-                <a href="#contact" className="hover:text-red-400 transition">{t('footer.contact')}</a>
+                <a href="mailto:sudorios.contact@gmail.com" className="hover:text-red-400 transition">{t('footer.contact')}</a>
             </nav>
             <div className="mt-4 sm:mt-0 text-gray-500 text-xs">{t('footer.copyright')}</div>
         </footer>

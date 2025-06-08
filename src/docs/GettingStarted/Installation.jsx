@@ -59,8 +59,8 @@ export default function Installation() {
                 <FaQuestionCircle className="mr-3 text-red-500" size={28} />
                 <p>
                     {t('docs.getting_started.installation.support.text')}{" "}
-                    <a href="mailto:tuemail@gmail.com" className="text-red-400 underline">
-                        tuemail@gmail.com
+                    <a href="mailto:sudorios.contact@gmail.com" className="text-red-400 underline">
+                        sudorios.contact@gmail.com
                     </a>
                     .
                 </p>

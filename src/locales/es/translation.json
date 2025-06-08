@@ -212,5 +212,11 @@
         "donate": "Donar",
         "contact": "Contacto",
         "copyright": "© 2025 Owens Bot. Todos los derechos reservados."
+    },
+    "contact": {
+        "title": "¿Tienes preguntas o sugerencias?",
+        "description": "Escríbenos por correo o únete a nuestra comunidad en Discord. Estamos encantados de ayudarte.",
+        "email": "Enviar correo",
+        "discord": "Unirse al Discord"
     }
 }
