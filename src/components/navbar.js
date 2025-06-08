@@ -37,19 +37,15 @@ export default function Navbar() {
                     <FaGithub size={24} />
                 </a>
 
-                <div className="flex gap-2 ml-4 text-sm">
-                    <button
-                        onClick={() => i18n.changeLanguage('es')}
-                        className={`px-2 py-1 rounded flex items-center gap-1 ${currentLang === 'es' ? 'bg-red-500 text-white' : 'hover:text-red-400'}`}
+                <div className="ml-4 text-sm">
+                    <select
+                        value={currentLang}
+                        onChange={(e) => i18n.changeLanguage(e.target.value)}
+                        className="px-2 py-1 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-400"
                     >
-                        🇪🇸 <span>ES</span>
-                    </button>
-                    <button
-                        onClick={() => i18n.changeLanguage('en')}
-                        className={`px-2 py-1 rounded flex items-center gap-1 ${currentLang === 'en' ? 'bg-red-500 text-white' : 'hover:text-red-400'}`}
-                    >
-                        🇺🇸 <span>EN</span>
-                    </button>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
                 </div>
             </div>
         </nav>

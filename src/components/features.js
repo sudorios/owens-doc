@@ -1,28 +1,31 @@
 import owensMatch from '../assets/images/match.png';
 import owensRanking from '../assets/images/ranking.png';
 import owensRate from '../assets/images/rate.png';
+import { useTranslation } from 'react-i18next';
 
 export default function FeatureSection() {
+    const { t } = useTranslation();
+
     return (
         <section className="bg-[#111827] text-white py-20 px-6">
             <div className="max-w-6xl mx-auto">
 
                 <h1 className="text-4xl font-extrabold mb-12 text-center">
-                    Why Choose Owens?
+                    {t('features.title')}
                 </h1>
 
                 <div className="grid md:grid-cols-2 gap-10 mb-20">
                     <div className="flex flex-col justify-center">
-                        <h2 className="text-3xl font-extrabold mb-6">Pool</h2>
+                        <h2 className="text-3xl font-extrabold mb-6">{t('features.pool.title')}</h2>
                         <p className="text-gray-400 mb-6">
-                            Create and manage betting pools easily with Owens. Here are some key commands to handle your pools and events on your Discord server:
+                            {t('features.pool.description')}
                         </p>
                         <ul className="list-disc list-inside text-gray-300 space-y-3 mb-6">
-                            <li><strong>!createpool &lt;name&gt;</strong>: Creates a new betting pool for the server.</li>
-                            <li><strong>!match &lt;pool&gt; &lt;fight&gt;</strong>: Posts a match for users to bet on using emojis.</li>
-                            <li><strong>!result &lt;messageID&gt; &lt;emoji&gt;</strong>: Sets the winning emoji for the match.</li>
-                            <li><strong>!finish &lt;pool&gt;</strong>: Finishes the betting pool, assigns points, and shows event rankings.</li>
-                            <li><strong>!ranking</strong>: Shows the global ranking for the current server.</li>
+                            <li><strong>{t('features.pool.commands.createpool')}</strong></li>
+                            <li><strong>{t('features.pool.commands.match')}</strong></li>
+                            <li><strong>{t('features.pool.commands.result')}</strong></li>
+                            <li><strong>{t('features.pool.commands.finish')}</strong></li>
+                            <li><strong>{t('features.pool.commands.ranking')}</strong></li>
                         </ul>
                     </div>
 
@@ -37,14 +40,14 @@ export default function FeatureSection() {
 
                 <div className="grid md:grid-cols-2 gap-10 mb-20">
                     <div className="flex flex-col justify-center order-2 md:order-1">
-                        <h2 className="text-3xl font-extrabold mb-6">Ranking</h2>
+                        <h2 className="text-3xl font-extrabold mb-6">{t('features.ranking.title')}</h2>
                         <p className="text-gray-400 mb-6">
-                            Keep track of the competition with Owens’ ranking system. Use the <code>!ranking</code> command to view the global standings in your server and see who’s leading the game.
+                            {t('features.ranking.description')}
                         </p>
                         <ul className="list-disc list-inside text-gray-300 space-y-3">
-                            <li>Displays updated global rankings automatically</li>
-                            <li>Helps increase competitiveness and engagement</li>
-                            <li>Supports multiple simultaneous events</li>
+                            <li>{t('features.ranking.features.display')}</li>
+                            <li>{t('features.ranking.features.competition')}</li>
+                            <li>{t('features.ranking.features.events')}</li>
                         </ul>
                     </div>
 
@@ -59,14 +62,14 @@ export default function FeatureSection() {
 
                 <div className="grid md:grid-cols-2 gap-10 mb-20">
                     <div className="flex flex-col justify-center">
-                        <h2 className="text-3xl font-extrabold mb-6">Rate</h2>
+                        <h2 className="text-3xl font-extrabold mb-6">{t('features.rate.title')}</h2>
                         <p className="text-gray-400 mb-6">
-                            Let users rate matches easily with Owens. Use the <code>!rate</code> command to create polls where your community can score matches from 1 to 5 stars, and <code>!viewrating</code> to see average ratings and votes.
+                            {t('features.rate.description')}
                         </p>
                         <ul className="list-disc list-inside text-gray-300 space-y-3">
-                            <li>Engages users by allowing them to rate matches interactively</li>
-                            <li>Shows average ratings to identify fan favorites</li>
-                            <li>Improves event feedback and community participation</li>
+                            <li>{t('features.rate.features.engagement')}</li>
+                            <li>{t('features.rate.features.ratings')}</li>
+                            <li>{t('features.rate.features.feedback')}</li>
                         </ul>
                     </div>
 
@@ -81,9 +84,9 @@ export default function FeatureSection() {
 
                 <div className="grid md:grid-cols-2 gap-10">
                     <div className="flex flex-col justify-center order-2 md:order-1">
-                        <h2 className="text-3xl font-extrabold mb-6">Donate</h2>
+                        <h2 className="text-3xl font-extrabold mb-6">{t('features.donate.title')}</h2>
                         <p className="text-gray-400 mb-6">
-                            Support the continuous development of Owens! Use the <code>!donate</code> command to see donation options or click the button below to contribute directly via Ko-fi.
+                            {t('features.donate.description')}
                         </p>
 
                         <a
@@ -92,7 +95,7 @@ export default function FeatureSection() {
                             rel="noopener noreferrer"
                             className="inline-block bg-[#29abe0] hover:bg-[#1c7dbf] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
                         >
-                            Support us on Ko-fi
+                            {t('features.donate.button')}
                         </a>
                     </div>
 

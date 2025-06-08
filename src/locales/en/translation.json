@@ -2,6 +2,70 @@
     "welcome": "Welcome!",
     "description": "This is your app in English.",
     "navbar": {
-        "docs": "Docs"
+        "docs": "Documentation"
+    },
+    "hero": {
+        "title": "Owens Bot",
+        "description": "A Discord bot for creating pools and rating matches.",
+        "start": "Get Started",
+        "more": "Learn More"
+    },
+    "features": {
+        "title": "Why Choose Owens?",
+        "pool": {
+            "title": "Pool",
+            "description": "Create and manage betting pools easily with Owens. Here are some key commands to handle your pools and events on your Discord server:",
+            "commands": {
+                "createpool": "!createpool <name>: Creates a new betting pool for the server.",
+                "match": "!match <pool> <fight>: Posts a match for users to bet on using emojis.",
+                "result": "!result <messageID> <emoji>: Sets the winning emoji for the match.",
+                "finish": "!finish <pool>: Finishes the betting pool, assigns points, and shows event rankings.",
+                "ranking": "!ranking: Shows the global ranking for the current server."
+            }
+        },
+        "ranking": {
+            "title": "Ranking",
+            "description": "Keep track of the competition with Owens' ranking system. Use the !ranking command to view the global standings in your server and see who's leading the game.",
+            "features": {
+                "display": "Displays updated global rankings automatically",
+                "competition": "Helps increase competitiveness and engagement",
+                "events": "Supports multiple simultaneous events"
+            }
+        },
+        "rate": {
+            "title": "Rate",
+            "description": "Let users rate matches easily with Owens. Use the !rate command to create polls where your community can score matches from 1 to 5 stars, and !viewrating to see average ratings and votes.",
+            "features": {
+                "engagement": "Engages users by allowing them to rate matches interactively",
+                "ratings": "Shows average ratings to identify fan favorites",
+                "feedback": "Improves event feedback and community participation"
+            }
+        },
+        "donate": {
+            "title": "Donate",
+            "description": "Support the continuous development of Owens! Use the !donate command to see donation options or click the button below to contribute directly via Ko-fi.",
+            "button": "Support us on Ko-fi"
+        }
+    },
+    "docs": {
+        "categories": {
+            "getting_started": "Getting Started",
+            "pools": "Pools",
+            "rate": "Rate"
+        },
+        "sections": {
+            "installation": "Installation",
+            "help": "Help",
+            "create_pools": "Create Pools",
+            "seasons": "Seasons",
+            "create_rate": "Create Rate"
+        }
+    },
+    "footer": {
+        "features": "Features",
+        "commands": "Commands",
+        "donate": "Donate",
+        "contact": "Contact",
+        "copyright": "© 2025 Owens Bot. All rights reserved."
     }
 }

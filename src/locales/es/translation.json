@@ -3,9 +3,67 @@
         "docs": "Documentación"
     },
     "hero": {
-        "title": "Bienvenido a Owens",
-        "description": "Automatiza tus quinielas y combates.",
-        "start": "Empezar",
-        "more": "Leer más"
+        "title": "Owens Bot",
+        "description": "Un bot de Discord para crear quinielas y calificar combates.",
+        "start": "Comenzar",
+        "more": "Aprender más"
+    },
+    "features": {
+        "title": "¿Por qué elegir Owens?",
+        "pool": {
+            "title": "Quinielas",
+            "description": "Crea y gestiona quinielas fácilmente con Owens. Aquí tienes algunos comandos clave para manejar tus quinielas y eventos en tu servidor de Discord:",
+            "commands": {
+                "createpool": "!createpool <nombre>: Crea una nueva quiniela para el servidor.",
+                "match": "!match <quiniela> <combate>: Publica un combate para que los usuarios apuesten usando emojis.",
+                "result": "!result <messageID> <emoji>: Establece el emoji ganador del combate.",
+                "finish": "!finish <quiniela>: Finaliza la quiniela, asigna puntos y muestra el ranking del evento.",
+                "ranking": "!ranking: Muestra el ranking global del servidor actual."
+            }
+        },
+        "ranking": {
+            "title": "Ranking",
+            "description": "Mantén un seguimiento de la competencia con el sistema de ranking de Owens. Usa el comando !ranking para ver la clasificación global en tu servidor y ver quién lidera el juego.",
+            "features": {
+                "display": "Muestra rankings globales actualizados automáticamente",
+                "competition": "Ayuda a aumentar la competitividad y el compromiso",
+                "events": "Soporta múltiples eventos simultáneos"
+            }
+        },
+        "rate": {
+            "title": "Calificar",
+            "description": "Permite a los usuarios calificar combates fácilmente con Owens. Usa el comando !rate para crear encuestas donde tu comunidad puede puntuar los combates de 1 a 5 estrellas, y !viewrating para ver las calificaciones promedio y votos.",
+            "features": {
+                "engagement": "Involucra a los usuarios permitiéndoles calificar combates de forma interactiva",
+                "ratings": "Muestra calificaciones promedio para identificar los favoritos de los fans",
+                "feedback": "Mejora la retroalimentación de eventos y la participación de la comunidad"
+            }
+        },
+        "donate": {
+            "title": "Donar",
+            "description": "¡Apoya el desarrollo continuo de Owens! Usa el comando !donate para ver las opciones de donación o haz clic en el botón de abajo para contribuir directamente a través de Ko-fi.",
+            "button": "Apóyanos en Ko-fi"
+        }
+    },
+    "docs": {
+        "categories": {
+            "getting_started": "Comenzando",
+            "pools": "Quinielas",
+            "rate": "Calificaciones"
+        },
+        "sections": {
+            "installation": "Instalación",
+            "help": "Ayuda",
+            "create_pools": "Crear Quinielas",
+            "seasons": "Temporadas",
+            "create_rate": "Crear Calificación"
+        }
+    },
+    "footer": {
+        "features": "Características",
+        "commands": "Comandos",
+        "donate": "Donar",
+        "contact": "Contacto",
+        "copyright": "© 2025 Owens Bot. Todos los derechos reservados."
     }
 }
