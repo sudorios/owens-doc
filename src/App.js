@@ -5,6 +5,7 @@ import LoadingSpinner from './components/loadingSpinner';
 
 const Home = lazy(() => import('./pages/Home'));
 const Docs = lazy(() => import('./pages/docs'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Installation = lazy(() => import('./docs/GettingStarted/Installation'));
 const Help = lazy(() => import('./docs/GettingStarted/Help'));
 const CreatePools = lazy(() => import('./docs/Pools/createPools'));
@@ -18,6 +19,7 @@ function App() {
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/docs" element={<Docs />}>
             <Route index element={<Installation />} />
             <Route path="installation" element={<Installation />} />
