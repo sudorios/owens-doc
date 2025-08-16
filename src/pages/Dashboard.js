@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getUser, getGuilds, syncGuilds as syncGuildsApi } from "../api/api";
+import { useNavigate } from "react-router-dom";
+import { getUser, getGuilds, syncGuilds as syncGuildsApi } from "../api/services";
 import "../assets/css/hero.css";
 
 const Dashboard = () => {
@@ -65,6 +66,8 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const navigate = useNavigate();
+
   if (loading) {
     return (
       <div className="text-white flex justify-center items-center h-screen">
@@ -98,13 +101,12 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-4 gap-6 mt-10">
         {user.guilds.map((guild) => {
-          const iconUrl =
-            guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
-
+          const iconUrl = guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
           return (
             <div
               key={guild.id}
               className="flex flex-col items-center cursor-pointer hover:scale-105 transition"
+              onClick={() => navigate(`/dashboard/${guild.id}/seasons`)}
             >
               <img
                 src={iconUrl}
