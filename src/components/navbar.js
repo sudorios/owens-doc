@@ -16,8 +16,8 @@ export default function Navbar() {
   useEffect(() => {
     if (isDashboard) {
       fetch("http://localhost:3000/api/auth/me", { credentials: "include" })
-        .then(res => res.json())
-        .then(data => setUser(data))
+        .then((res) => res.json())
+        .then((data) => setUser(data))
         .catch(() => setUser(null));
     }
   }, [isDashboard]);
@@ -62,7 +62,9 @@ export default function Navbar() {
               <>
                 {user && (
                   <div className="flex items-center gap-2 ml-6">
-                    <span className="font-bold text-lg text-white">{user.username}</span>
+                    <span className="font-bold text-lg text-white">
+                      {user.username}
+                    </span>
                     <img
                       src={user.avatar}
                       alt={user.username}
@@ -98,14 +100,14 @@ export default function Navbar() {
                     <FaGithub className="inline mr-1" /> Github
                   </a>
                   <a
-                    href="https://discord.com/oauth2/authorize?client_id=1372312475533316190&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify+email"
+                    href="https://discord.com/oauth2/authorize?client_id=1372312475533316190&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify+email+guilds"
                     className="hover:text-green-400 transition flex items-center gap-1"
                   >
                     <FaUser className="inline" /> Login
                   </a>
                   <select
                     value={i18n.language}
-                    onChange={e => i18n.changeLanguage(e.target.value)}
+                    onChange={(e) => i18n.changeLanguage(e.target.value)}
                     className="bg-gray-800 text-white border border-gray-700 rounded px-2 py-1 ml-2"
                   >
                     <option value="es">ES</option>
