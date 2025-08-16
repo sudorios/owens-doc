@@ -11,6 +11,8 @@ const Help = lazy(() => import('./docs/GettingStarted/Help'));
 const CreatePools = lazy(() => import('./docs/Pools/createPools'));
 const Seasons = lazy(() => import('./docs/Pools/seasons'));
 const Rate = lazy(() => import('./docs/Rate/CreateRate'));
+const SeasonsDashboard = lazy(() => import('./pages/SeasonsDashboard'));
+const SeasonDetail = lazy(() => import('./pages/SeasonDetail'));
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/:guildId/seasons" element={<SeasonsDashboard />} />
+          <Route path="/dashboard/:guildId/seasons/:seasonId" element={<SeasonDetail />} />
+          <Route path="/dashboard/:guildId/seasons/:seasonId/:eventId" element={<SeasonDetail />} />
           <Route path="/docs" element={<Docs />}>
             <Route index element={<Installation />} />
             <Route path="installation" element={<Installation />} />

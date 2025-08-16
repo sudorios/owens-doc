@@ -1,24 +1,23 @@
 import axios from "axios";
 
-export const getUser = async () => {
-  const res = await axios.get("http://localhost:3000/api/auth/me", {
-    withCredentials: true,
-  });
-  return res.data;
-};
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const ENV = process.env.REACT_APP_ENV;
 
-export const getGuilds = async () => {
-  const res = await axios.get("http://localhost:3000/api/guilds", {
-    withCredentials: true,
-  });
-  return res.data.data;
-};
+if (!API_BASE_URL) {
+  console.error("❌ REACT_APP_API_BASE_URL no está definido en tu .env");
+}
 
-export const syncGuilds = async () => {
-  const res = await axios.post(
-    "http://localhost:3000/api/guilds/sync",
-    {},
-    { withCredentials: true }
+if (ENV === "development") {
+  console.warn(
+    "%c⚠️ Usando API de desarrollo:", 
+    "color: orange; font-weight: bold;", 
+    API_BASE_URL
   );
-  return res.data;
-};
+}
+
+const api = axios.create({
+  baseURL: API_BASE_URL, 
+  withCredentials: true,
+});
+
+export default api;
