@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getEvents, getEventScore } from "../api/services";
+import { getEvents, getEventScore, createEvent } from "../api/services";
 import "../assets/css/hero.css";
 
 const SeasonDetail = () => {
@@ -9,6 +9,10 @@ const SeasonDetail = () => {
 
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [newEventName, setNewEventName] = useState("");
+  const [newEventState, setNewEventState] = useState("pending");
+  const [creatingEvent, setCreatingEvent] = useState(false);
 
   const [eventScore, setEventScore] = useState([]);
   const [loadingEventScore, setLoadingEventScore] = useState(true);
@@ -54,6 +58,13 @@ const SeasonDetail = () => {
       <aside className="w-64 bg-gray-900 text-white p-6 flex flex-col border-r border-gray-800 mt-4">
         <h2 className="text-2xl font-bold mb-6 tracking-wide">Eventos</h2>
 
+        <button
+          className="mb-4 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-semibold shadow"
+          onClick={() => setShowEventModal(true)}
+        >
+          + Nuevo evento
+        </button>
+
         <p className="text-gray-400 text-sm mb-2 uppercase tracking-wide">
           Lista de eventos
         </p>
@@ -80,6 +91,91 @@ const SeasonDetail = () => {
             ))
           )}
         </nav>
+
+        {showEventModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div className="bg-gray-900 rounded-lg p-8 w-full max-w-md shadow-lg">
+              <h2 className="text-2xl font-bold mb-4">Crear nuevo evento</h2>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setCreatingEvent(true);
+                  try {
+                    const userId = localStorage.getItem("userId");
+                    await createEvent({
+                      guildId: Number(guildId),
+                      userId: Number(userId),
+                      seasonId: Number(seasonId),
+                      name: newEventName,
+                      state: newEventState,
+                    });
+                    setShowEventModal(false);
+                    setNewEventName("");
+                    setNewEventState("pending");
+                    setCreatingEvent(false);
+                    setLoadingEvents(true);
+                    const data = await getEvents(seasonId);
+                    setEvents(Array.isArray(data) ? data : data.data || []);
+                    setLoadingEvents(false);
+                  } catch (err) {
+                    alert("Error creando el evento");
+                    setCreatingEvent(false);
+                  }
+                }}
+              >
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold mb-1">Nombre del evento</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                    value={newEventName}
+                    onChange={e => setNewEventName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold mb-1">Estado</label>
+                  <select
+                    className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                    value={newEventState}
+                    onChange={e => setNewEventState(e.target.value)}
+                    required
+                  >
+                    <option value="pending">Pendiente</option>
+                    <option value="active">Activo</option>
+                    <option value="finished">Finalizado</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold mb-1">Fecha de inicio</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                    value={new Date().toLocaleString()}
+                    disabled
+                  />
+                </div>
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold"
+                    disabled={creatingEvent}
+                  >
+                    {creatingEvent ? "Creando..." : "Crear"}
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-gray-600 text-white rounded font-semibold"
+                    onClick={() => setShowEventModal(false)}
+                    disabled={creatingEvent}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </aside>
 
       <main className="flex-1 p-10 text-white mt-20">

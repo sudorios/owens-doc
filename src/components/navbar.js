@@ -5,6 +5,7 @@ import { useState } from "react";
 import owensIcon from "../assets/images/owens.png";
 
 import React, { useEffect } from "react";
+import { getUser } from "../api/services";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -14,12 +15,18 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (isDashboard) {
-      fetch("http://localhost:3000/api/auth/me", { credentials: "include" })
-        .then((res) => res.json())
-        .then((data) => setUser(data))
-        .catch(() => setUser(null));
-    }
+    const fetchUser = async () => {
+      try {
+        const data = await getUser();
+        setUser(data);
+        if (data && data.id) {
+          localStorage.setItem("userId", data.id);
+        }
+      } catch (err) {
+        setUser(null);
+      }
+    };
+    if (isDashboard) fetchUser();
   }, [isDashboard]);
 
   const toggleMenu = () => {

@@ -1,3 +1,5 @@
+
+
 import api from "./api";
 
 export const getEvents = async (seasonId) => {
@@ -15,9 +17,23 @@ export const getSeasons = async (guildId) => {
   return res.data;
 };
 
+export const createSeason = async (data) => {
+  const res = await api.post("/api/season", data);
+  return res.data;
+};
+
+export const createEvent = async (data) => {
+  const res = await api.post("/api/event", data);
+  return res.data;
+}
+
 export const getUser = async () => {
-  const res = await api.get("/api/auth/me");
-  return res.data.data;
+  try {
+    const res = await api.get("/api/auth/me", { withCredentials: true });
+    return res.data && res.data.data ? res.data.data : res.data;
+  } catch (err) {
+    return null;
+  }
 };
 
 export const getGuilds = async () => {
