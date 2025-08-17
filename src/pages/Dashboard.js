@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUser, getGuilds, syncGuilds as syncGuildsApi } from "../api/services";
+import {
+  getUser,
+  getGuilds,
+  syncGuilds as syncGuildsApi,
+} from "../api/services";
 import "../assets/css/hero.css";
 
 const Dashboard = () => {
@@ -78,45 +82,53 @@ const Dashboard = () => {
 
   return (
     <div className="hero-pt relative min-h-screen bg-[#1a132f] flex flex-col items-center pt-20">
-      <div className="w-full text-white py-4 px-8 flex items-center justify-between">
-        <span className="font-bold text-2xl">
-          Hello, {user.username}! Please select a server
-        </span>
-        <button
-          onClick={syncGuilds}
-          disabled={syncing || cooldown > 0}
-          className={`px-4 py-2 rounded ${
-            syncing || cooldown > 0
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {syncing
-            ? "Syncing..."
-            : cooldown > 0
-            ? `Wait ${cooldown}s`
-            : "Sincronizar servidores"}
-        </button>
-      </div>
-
-      <div className="grid grid-cols-4 gap-6 mt-10">
-        {user.guilds.map((guild) => {
-          const iconUrl = guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
-          return (
-            <div
-              key={guild.id}
-              className="flex flex-col items-center cursor-pointer hover:scale-105 transition"
-              onClick={() => navigate(`/dashboard/${guild.id}/seasons`)}
-            >
-              <img
-                src={iconUrl}
-                alt={guild.name}
-                className="w-20 h-20 rounded-full"
-              />
-              <span className="text-white mt-2 text-sm">{guild.name}</span>
-            </div>
-          );
-        })}
+      <div className="w-11/12 max-w-6xl bg-[#241b3d] rounded-2xl shadow-lg p-8 mt-10">
+        <div className="w-full text-white py-4 px-8 flex items-center justify-between">
+          <span className="font-bold text-2xl">
+            Hola, selecciona un servidor
+          </span>
+          <button
+            onClick={syncGuilds}
+            disabled={syncing || cooldown > 0}
+            className={`px-4 py-2 rounded font-medium transition-colors ${
+              syncing || cooldown > 0
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {syncing
+              ? "Syncing..."
+              : cooldown > 0
+              ? `Wait ${cooldown}s`
+              : "Sincronizar servidores"}
+          </button>
+        </div>
+        <hr className="border-gray-600/50 mb-4" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {user.guilds.map((guild) => {
+            const iconUrl =
+              guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
+            return (
+              <div
+                key={guild.id}
+                className="flex flex-col items-center"
+                onClick={() => {
+                  localStorage.setItem("guildName", guild.name);
+                  navigate(`/dashboard/${guild.id}/seasons`);
+                }}
+              >
+                <img
+                  src={iconUrl}
+                  alt={guild.name}
+                  className="w-20 h-20 rounded-full border-2 border-gray-700 shadow-md cursor-pointer hover:scale-105 transition-transform duration-200"
+                />
+                <span className="text-white mt-2 text-sm text-center">
+                  {guild.name}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
