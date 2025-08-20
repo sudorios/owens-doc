@@ -1,0 +1,60 @@
+import React from "react";
+
+const ScoresTable = ({ scores, isLoading, emptyMessage }) => {
+  if (isLoading) {
+    return (
+      <div className="mt-4">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-700 rounded mb-4"></div>
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-12 bg-gray-700 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (scores.length === 0) {
+    return (
+      <div className="mt-4 text-center py-8">
+        <p className="text-gray-400 text-lg">{emptyMessage}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 overflow-x-auto">
+      <table className="min-w-full bg-gray-700 rounded-lg overflow-hidden shadow-md">
+        <thead className="bg-gray-900">
+          <tr>
+            <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">ID</th>
+            <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Usuario</th>
+            <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Puntos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {scores.map((score, i) => (
+            <tr
+              key={score.id}
+              className={`${
+                i % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
+              } hover:bg-gray-600 transition`}
+            >
+              <td className="px-4 py-2 text-gray-200 font-medium">{score.id}</td>
+              <td className="px-4 py-2 text-gray-100">
+                {score.user?.username || score.username || "Desconocido"}
+              </td>
+              <td className="px-4 py-2 text-blue-400 font-bold">
+                {score.totalPoints || score.points || 0}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ScoresTable;
