@@ -27,14 +27,6 @@ export const createEvent = async (data) => {
   return res.data;
 }
 
-export const getUser = async () => {
-  try {
-    const res = await api.get("/api/auth/me", { withCredentials: true });
-    return res.data && res.data.data ? res.data.data : res.data;
-  } catch (err) {
-    return null;
-  }
-};
 
 export const getGuilds = async () => {
   const res = await api.get("/api/guilds");
