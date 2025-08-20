@@ -9,6 +9,19 @@ export const getUser = async () => {
   }
 };
 
+export const searchUsers = async (query) => {
+  try {
+    const res = await api.get("/api/user", {
+      withCredentials: true,
+      params: { search: query }
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error searching users:", err);
+    throw err;
+  }
+};
+
 export const getAllUser = async (page = 1, pageSize = 10) => {
   try {
     const res = await api.get("/api/user", {
