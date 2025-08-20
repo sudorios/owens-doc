@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getSeasons, createSeason } from "../api/services";
+import { getSeasons, createSeason } from "../services/services";
 
 const SeasonsDashboard = () => {
   const { guildId } = useParams();

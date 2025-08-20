@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  getUser,
   getGuilds,
   syncGuilds as syncGuildsApi,
-} from "../api/services";
+} from "../services/services";
 import "../assets/css/hero.css";
+import { getUser } from "../services/user";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -87,21 +87,29 @@ const Dashboard = () => {
           <span className="font-bold text-2xl">
             Hola, selecciona un servidor
           </span>
-          <button
-            onClick={syncGuilds}
-            disabled={syncing || cooldown > 0}
-            className={`px-4 py-2 rounded font-medium transition-colors ${
-              syncing || cooldown > 0
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {syncing
-              ? "Syncing..."
-              : cooldown > 0
-              ? `Wait ${cooldown}s`
-              : "Sincronizar servidores"}
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/dashboard/users")}
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium shadow transition-colors"
+            >
+              Gestionar usuarios
+            </button>
+            <button
+              onClick={syncGuilds}
+              disabled={syncing || cooldown > 0}
+              className={`px-4 py-2 rounded font-medium transition-colors ${
+                syncing || cooldown > 0
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              {syncing
+                ? "Syncing..."
+                : cooldown > 0
+                ? `Wait ${cooldown}s`
+                : "Sincronizar servidores"}
+            </button>
+          </div>
         </div>
         <hr className="border-gray-600/50 mb-4" />
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">

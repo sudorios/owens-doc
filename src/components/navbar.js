@@ -5,7 +5,7 @@ import { useState } from "react";
 import owensIcon from "../assets/images/owens.png";
 
 import React, { useEffect } from "react";
-import { getUser } from "../api/services";
+import { getUser } from "../services/user";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
