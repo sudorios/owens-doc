@@ -11,9 +11,9 @@ export const getUser = async () => {
 
 export const searchUsers = async (query) => {
   try {
-    const res = await api.get("/api/user", {
+    const res = await api.get("/api/user/search", {
       withCredentials: true,
-      params: { search: query }
+      params: { q: query }  
     });
     return res.data;
   } catch (err) {
@@ -38,7 +38,7 @@ export const getAllUser = async (page = 1, pageSize = 10) => {
 export const createUser = async (data) => {
   try {
     const res = await api.post("/api/user", data, { withCredentials: true });
-    return res.data;
+    return res.data.data;
   } catch (err) {
     console.error("Error creating user:", err);
     throw err;
