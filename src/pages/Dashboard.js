@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  getGuilds,
-  syncGuilds as syncGuildsApi,
-} from "../services/services";
+import { syncGuilds as syncGuildsApi } from "../services/services";
 import "../assets/css/hero.css";
 import { getUser } from "../services/user";
+import { getGuildsByUser } from "../services/guildUser";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -13,8 +11,8 @@ const Dashboard = () => {
   const [syncing, setSyncing] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
-  const fetchGuilds = async () => {
-    return await getGuilds();
+  const fetchGuilds = async (userId) => {
+    return await getGuildsByUser(userId);
   };
 
   const syncGuilds = async () => {
@@ -51,7 +49,7 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const me = await getUser();
-      let guilds = await fetchGuilds();
+      let guilds = await fetchGuilds(me.id);
       if (guilds.length === 0) {
         guilds = await syncGuilds();
       }
@@ -122,7 +120,7 @@ const Dashboard = () => {
                 className="flex flex-col items-center"
                 onClick={() => {
                   localStorage.setItem("guildName", guild.name);
-                  navigate(`/dashboard/${guild.id}/seasons`);
+                  navigate(`/dashboard/${guild.guildId}/seasons`);
                 }}
               >
                 <img

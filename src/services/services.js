@@ -27,12 +27,6 @@ export const createEvent = async (data) => {
   return res.data;
 }
 
-
-export const getGuilds = async () => {
-  const res = await api.get("/api/guilds");
-  return res.data.data;
-};
-
 export const syncGuilds = async () => {
   const res = await api.post("/api/guilds/sync", {});
   return res.data;

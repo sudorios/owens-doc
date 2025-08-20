@@ -30,3 +30,15 @@ export async function createGuildUser(guildId, userData) {
     throw err;
   }
 }
+
+export async function getGuildsByUser(userId) {
+  try {
+    const res = await api.get(`/api/user/${userId}/guilds`, {
+      withCredentials: true,
+    });
+    return res.data.data;
+  } catch (err) {
+    console.error("Error fetching guilds by user:", err.response?.data || err);
+    throw err;
+  }
+}

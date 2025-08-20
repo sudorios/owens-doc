@@ -27,6 +27,12 @@ const SeasonsDashboard = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 1,
+    total: 0
+  });
 
   useEffect(() => {
     const fetchSeasons = async () => {
@@ -42,24 +48,29 @@ const SeasonsDashboard = () => {
     fetchSeasons();
   }, [guildId]);
 
+  const fetchScores = async (page = 1) => {
+    if (!seasons || seasons.length === 0) return;
+    setLoadingScores(true);
+
+    try {
+      const data = await getScore(guildId, page, pagination.pageSize);
+      setScores(data?.data || []);
+      setPagination(prev => ({
+        ...prev,
+        currentPage: page,
+        total: data.total || 0,
+        totalPages: Math.ceil((data.total || 0) / pagination.pageSize)
+      }));
+    } catch (err) {
+      console.error("Error cargando puntajes", err);
+    } finally {
+      setLoadingScores(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchScores = async () => {
-      if (!seasons || seasons.length === 0) return;
-      setLoadingScores(true);
-
-      try {
-        const activeSeason = seasons.find((s) => s.active) || seasons[0];
-        const data = await getScore(guildId);
-        setScores(data?.data || []);
-      } catch (err) {
-        console.error("Error cargando puntajes", err);
-      } finally {
-        setLoadingScores(false);
-      }
-    };
-
-    fetchScores();
-  }, [seasons]);
+    fetchScores(1);
+  }, [seasons, guildId]);
 
   const guildName =
     seasons.length > 0 ? seasons[0].guild?.name : "Unknown Guild";
@@ -146,13 +157,49 @@ const SeasonsDashboard = () => {
                       key={score.userId}
                       className="border-b border-gray-700 hover:bg-gray-700/50"
                     >
-                      <td className="px-4 py-2 font-bold">{index + 1}</td>
+                      <td className="px-4 py-2 font-bold">
+                        {((pagination.currentPage - 1) * pagination.pageSize) + index + 1}
+                      </td>
                       <td className="px-4 py-2">{score.user.username}</td>
                       <td className="px-4 py-2">{score.points}</td>
                     </tr>
                   ))}
               </tbody>
             </table>
+            
+            {/* Paginación */}
+            <div className="mt-4 flex items-center justify-between border-t border-gray-700/50 pt-4">
+              <div className="text-sm text-gray-400">
+                Mostrando {scores.length} de {pagination.total} usuarios
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => fetchScores(pagination.currentPage - 1)}
+                  disabled={pagination.currentPage === 1}
+                  className={`px-3 py-1 rounded-lg text-sm ${
+                    pagination.currentPage === 1
+                      ? 'bg-gray-700/50 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  Anterior
+                </button>
+                <span className="text-sm text-gray-400">
+                  Página {pagination.currentPage} de {pagination.totalPages}
+                </span>
+                <button
+                  onClick={() => fetchScores(pagination.currentPage + 1)}
+                  disabled={pagination.currentPage >= pagination.totalPages}
+                  className={`px-3 py-1 rounded-lg text-sm ${
+                    pagination.currentPage >= pagination.totalPages
+                      ? 'bg-gray-700/50 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
