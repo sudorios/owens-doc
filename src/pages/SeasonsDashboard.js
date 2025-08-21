@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSeasons, createSeason } from "../services/services";
 import { getScore, createGuildUser } from "../services/guildUser";
@@ -48,7 +48,7 @@ const SeasonsDashboard = () => {
     fetchSeasons();
   }, [guildId]);
 
-  const fetchScores = async (page = 1) => {
+  const fetchScores = useCallback(async (page = 1) => {
     if (!seasons || seasons.length === 0) return;
     setLoadingScores(true);
 
@@ -66,11 +66,11 @@ const SeasonsDashboard = () => {
     } finally {
       setLoadingScores(false);
     }
-  };
+  }, [guildId, pagination.pageSize, seasons]);
 
   useEffect(() => {
     fetchScores(1);
-  }, [seasons, guildId]);
+  }, [fetchScores]);
 
   const guildName =
     seasons.length > 0 ? seasons[0].guild?.name : "Unknown Guild";

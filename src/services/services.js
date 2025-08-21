@@ -7,10 +7,6 @@ export const getEvents = async (seasonId) => {
   return res.data;
 };
 
-export const getEventScore = async(eventId) => {
-    const res = await api.get(`/api/scoreEvent?eventId=${eventId}`);
-    return res.data;
-}
 
 export const getSeasons = async (guildId) => {
   const res = await api.get(`/api/season?guildId=${guildId}`);
