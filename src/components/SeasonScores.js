@@ -1,6 +1,7 @@
 import React from "react";
 import ScoresTable from "./ScoresTable";
 import Pagination from "./Pagination";
+import PositionChangeSummary from "./PositionChangeSummary";
 
 const SeasonScores = ({
   guildName,
@@ -64,13 +65,19 @@ const SeasonScores = ({
         </div>
       )}
 
+      {/* Resumen de cambios de posición */}
+      {!hasEventId && (
+        <PositionChangeSummary scores={seasonScores} />
+      )}
+
       <ScoresTable
         scores={scores}
         isLoading={isLoading}
         emptyMessage={emptyMessage}
+        showPositionChanges={!hasEventId}
       />
 
-      {!hasEventId && (
+      {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -78,7 +85,7 @@ const SeasonScores = ({
           pageSize={pageSize}
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
-          isLoading={loadingSeasonScores}
+          isLoading={isLoading}
         />
       )}
     </main>

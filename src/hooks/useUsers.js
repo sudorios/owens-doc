@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { createSeasonScore } from "../services/seasonScore";
+import { createEventScore } from "../services/evenScore";
 import { searchUsers } from "../services/user";
 
-export const useUsers = (guildId, seasonId) => {
+export const useUsers = (guildId, seasonId, eventId = null) => {
   const [participants, setParticipants] = useState([]);
   const [loadingParticipants, setLoadingParticipants] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +16,7 @@ export const useUsers = (guildId, seasonId) => {
   
   const [formData, setFormData] = useState({
     userId: "",
-    totalPoints: "",
+    points: "",
     position: "",
     lastPosition: ""
   });
@@ -59,8 +60,8 @@ export const useUsers = (guildId, seasonId) => {
   };
 
   const handleAddUser = async () => {
-    if (!formData.userId || !formData.totalPoints || !formData.position || !formData.lastPosition) {
-      setMessage({ type: "error", text: "Todos los campos son requeridos" });
+    if (!formData.userId || !formData.points) {
+      setMessage({ type: "error", text: "Usuario y puntos son requeridos" });
       return false;
     }
 
@@ -73,32 +74,56 @@ export const useUsers = (guildId, seasonId) => {
     setMessage({ type: "", text: "" });
     
     try {
-      console.log("Creando season score para usuario:", selectedUser.username || selectedUser.name);
-      console.log("Datos a enviar:", {
-        guildId: Number(guildId),
-        seasonId: Number(seasonId),
-        userId: Number(formData.userId),
-        totalPoints: Number(formData.totalPoints),
-        position: Number(formData.position),
-        lastPosition: Number(formData.lastPosition)
-      });
-      
-      const result = await createSeasonScore(
-        Number(guildId),
-        Number(seasonId),
-        Number(formData.userId),
-        Number(formData.totalPoints),
-        Number(formData.position),
-        Number(formData.lastPosition)
-      );
-      
-      console.log("Season score creado exitosamente:", result);
-      setMessage({ type: "success", text: "Usuario agregado exitosamente" });
+      if (eventId) {
+        // Crear event score
+        console.log("Creando event score para usuario:", selectedUser.username || selectedUser.name);
+        console.log("Datos a enviar:", {
+          eventId: Number(eventId),
+          userId: Number(formData.userId),
+          guildId: Number(guildId),
+          seasonId: Number(seasonId),
+          points: Number(formData.points)
+        });
+        
+        const result = await createEventScore(
+          Number(eventId),
+          Number(formData.userId),
+          Number(guildId),
+          Number(seasonId),
+          Number(formData.points)
+        );
+        
+        console.log("Event score creado exitosamente:", result);
+        setMessage({ type: "success", text: "Usuario agregado al evento exitosamente" });
+      } else {
+        // Crear season score
+        console.log("Creando season score para usuario:", selectedUser.username || selectedUser.name);
+        console.log("Datos a enviar:", {
+          guildId: Number(guildId),
+          seasonId: Number(seasonId),
+          userId: Number(formData.userId),
+          totalPoints: Number(formData.points),
+          position: Number(formData.position || 0),
+          lastPosition: Number(formData.lastPosition || 0)
+        });
+        
+        const result = await createSeasonScore(
+          Number(guildId),
+          Number(seasonId),
+          Number(formData.userId),
+          Number(formData.points),
+          Number(formData.position || 0),
+          Number(formData.lastPosition || 0)
+        );
+        
+        console.log("Season score creado exitosamente:", result);
+        setMessage({ type: "success", text: "Usuario agregado a la temporada exitosamente" });
+      }
       
       resetForm();
       return true;
     } catch (err) {
-      console.error("Error creando season score:", err);
+      console.error("Error creando score:", err);
       setMessage({ type: "error", text: err.message || "Error al agregar usuario" });
       return false;
     } finally {
@@ -109,7 +134,7 @@ export const useUsers = (guildId, seasonId) => {
   const resetForm = () => {
     setFormData({
       userId: "",
-      totalPoints: "",
+      points: "",
       position: "",
       lastPosition: ""
     });

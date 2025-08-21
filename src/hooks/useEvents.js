@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { getEvents, getEventScore } from "../services/services";
+import { getEvents } from "../services/services";
 import { getSeasonScores } from "../services/seasonScore";
+import { getEventScore } from "../services/evenScore";
 
 export const useEvents = (seasonId, eventId, guildId) => {
   const [events, setEvents] = useState([]);
@@ -30,8 +31,20 @@ export const useEvents = (seasonId, eventId, guildId) => {
         if (eventId) {
           console.log("Fetching event scores for event:", eventId);
           setLoadingEventScore(true);
-          const dataScores = await getEventScore(eventId);
-          setEventScore(Array.isArray(dataScores) ? dataScores : dataScores.data || []);
+          const dataScores = await getEventScore(eventId, currentPage, pageSize);
+          
+          if (dataScores && dataScores.data) {
+            setEventScore(dataScores.data || []);
+            setTotalItems(dataScores.total || 0);
+            setTotalPages(dataScores.totalPages || 0);
+          } else {
+            const scoresArray = Array.isArray(dataScores) ? dataScores : [];
+            setEventScore(scoresArray);
+            setTotalItems(scoresArray.length);
+            const calculatedTotalPages = Math.ceil(scoresArray.length / pageSize);
+            setTotalPages(calculatedTotalPages);
+          }
+          
           setLoadingEventScore(false);
         } else if (guildId) {
           console.log("Fetching season scores for guild:", guildId, "season:", seasonId, "page:", currentPage, "pageSize:", pageSize);
@@ -109,6 +122,34 @@ export const useEvents = (seasonId, eventId, guildId) => {
     }
   };
 
+  const refreshEventScore = async () => {
+    if (!eventId) return;
+    
+    try {
+      setError(null);
+      setLoadingEventScore(true);
+      const dataScores = await getEventScore(eventId, currentPage, pageSize);
+      
+      if (dataScores && dataScores.data) {
+        setEventScore(dataScores.data || []);
+        setTotalItems(dataScores.total || 0);
+        setTotalPages(dataScores.totalPages || 0);
+      } else {
+        const scoresArray = Array.isArray(dataScores) ? dataScores : [];
+        setEventScore(scoresArray);
+        setTotalItems(scoresArray.length);
+        const calculatedTotalPages = Math.ceil(scoresArray.length / pageSize);
+        setTotalPages(calculatedTotalPages);
+      }
+      
+      setLoadingEventScore(false);
+    } catch (err) {
+      console.error("Error refrescando puntajes del evento:", err);
+      setError(err.message || "Error refrescando puntajes del evento");
+      setLoadingEventScore(false);
+    }
+  };
+
   const refreshAll = async () => {
     await Promise.all([
       refreshEvents(),
@@ -152,6 +193,7 @@ export const useEvents = (seasonId, eventId, guildId) => {
     totalItems,
     totalPages,
     refreshEvents,
+    refreshEventScore,
     refreshSeasonScores,
     refreshAll,
     goToPage,

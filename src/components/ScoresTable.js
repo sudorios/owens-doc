@@ -1,6 +1,20 @@
 import React from "react";
 
-const ScoresTable = ({ scores, isLoading, emptyMessage }) => {
+const ScoresTable = ({ scores, isLoading, emptyMessage, showPositionChanges = false }) => {
+  const getPositionChange = (position, lastPosition) => {
+    if (!lastPosition || position === lastPosition) return null;
+    
+    const change = lastPosition - position;
+    const isImprovement = change > 0;
+    
+    return {
+      change: Math.abs(change),
+      isImprovement,
+      arrow: isImprovement ? "↑" : "↓",
+      color: isImprovement ? "text-green-400" : "text-red-400"
+    };
+  };
+
   if (isLoading) {
     return (
       <div className="mt-4">
@@ -29,28 +43,62 @@ const ScoresTable = ({ scores, isLoading, emptyMessage }) => {
       <table className="min-w-full bg-gray-700 rounded-lg overflow-hidden shadow-md">
         <thead className="bg-gray-900">
           <tr>
-            <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">ID</th>
+            {showPositionChanges ? (
+              <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Posición</th>
+            ) : (
+              <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">ID</th>
+            )}
             <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Usuario</th>
             <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Puntos</th>
+            {showPositionChanges && (
+              <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Cambio</th>
+            )}
           </tr>
         </thead>
         <tbody>
-          {scores.map((score, i) => (
-            <tr
-              key={score.id}
-              className={`${
-                i % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
-              } hover:bg-gray-600 transition`}
-            >
-              <td className="px-4 py-2 text-gray-200 font-medium">{score.id}</td>
-              <td className="px-4 py-2 text-gray-100">
-                {score.user?.username || score.username || "Desconocido"}
-              </td>
-              <td className="px-4 py-2 text-blue-400 font-bold">
-                {score.totalPoints || score.points || 0}
-              </td>
-            </tr>
-          ))}
+          {scores.map((score, i) => {
+            const positionChange = showPositionChanges ? getPositionChange(score.position, score.lastPosition) : null;
+            
+            return (
+              <tr
+                key={score.id}
+                className={`${
+                  i % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
+                } hover:bg-gray-600 transition`}
+              >
+                <td className="px-4 py-2 text-gray-200 font-medium">
+                  {showPositionChanges ? score.position : score.id}
+                </td>
+                <td className="px-4 py-2 text-gray-100">
+                  {score.user?.username || score.username || "Desconocido"}
+                </td>
+                <td className="px-4 py-2 text-blue-400 font-bold">
+                  {score.totalPoints || score.points || 0}
+                </td>
+                {showPositionChanges && (
+                  <td className="px-4 py-2">
+                    {positionChange ? (
+                      <div className="flex items-center gap-2">
+                        <span className={`text-lg font-bold ${positionChange.color}`}>
+                          {positionChange.arrow}
+                        </span>
+                        <span className={`text-sm ${positionChange.color}`}>
+                          {positionChange.change} puesto{positionChange.change > 1 ? 's' : ''}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          ({score.lastPosition} → {score.position})
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-gray-500 text-sm">
+                        {score.lastPosition ? "Sin cambios" : "Nuevo"}
+                      </span>
+                    )}
+                  </td>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

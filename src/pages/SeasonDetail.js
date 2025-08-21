@@ -29,6 +29,7 @@ const SeasonDetail = () => {
     totalItems,
     totalPages,
     refreshEvents,
+    refreshEventScore,
     refreshSeasonScores,
     goToPage,
     nextPage,
@@ -74,7 +75,7 @@ const SeasonDetail = () => {
     handleSelectUser,
     clearSearch,
     handleAddUser 
-  } = useUsers(guildId, seasonId);
+  } = useUsers(guildId, seasonId, eventId);
 
   const guildName = getGuildName();
   const seasonName = getSeasonName();
@@ -95,7 +96,9 @@ const SeasonDetail = () => {
     const success = await handleAddUser();
     if (success) {
       closeAddUserModal();
-      if (!eventId) {
+      if (eventId) {
+        await refreshEventScore();
+      } else {
         await refreshSeasonScores();
       }
     }
@@ -154,6 +157,7 @@ const SeasonDetail = () => {
         onSearchUsers={handleSearchUsers}
         onSelectUser={handleSelectUser}
         onClearSearch={clearSearch}
+        isEvent={!!eventId}
       />
 
       <CreateEventModal

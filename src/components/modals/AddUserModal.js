@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 
-const AddUserModal = ({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
-  formData, 
+const AddUserModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  formData,
   setFormData,
   isSubmitting = false,
   message = { type: "", text: "" },
@@ -15,11 +15,13 @@ const AddUserModal = ({
   selectedUser,
   onSearchUsers,
   onSelectUser,
-  onClearSearch
+  onClearSearch,
+  isEvent = false
 }) => {
+  // Búsqueda con debounce
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const timeoutId = setTimeout(() => {
       if (searchQuery && searchQuery.length >= 2) {
         onSearchUsers(searchQuery);
@@ -48,12 +50,15 @@ const AddUserModal = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 text-white">
       <div className="bg-gray-900 rounded-lg p-8 w-full max-w-md shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Agregar Puntaje de Usuario</h2>
-        
+        <h2 className="text-2xl font-bold mb-4">
+          {isEvent ? "Agregar Usuario al Evento" : "Agregar Puntaje de Usuario"}
+        </h2>
+
+        {/* Mensajes de éxito y error */}
         {message.text && (
           <div className={`mb-4 p-3 rounded-lg ${
-            message.type === "success" 
-              ? "bg-green-900 border border-green-700 text-green-200" 
+            message.type === "success"
+              ? "bg-green-900 border border-green-700 text-green-200"
               : "bg-red-900 border border-red-700 text-red-200"
           }`}>
             <p className="text-sm">{message.text}</p>
@@ -66,6 +71,7 @@ const AddUserModal = ({
             onSubmit();
           }}
         >
+          {/* Búsqueda de usuarios */}
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Buscar Usuario</label>
             <div className="relative">
@@ -89,7 +95,7 @@ const AddUserModal = ({
                 </button>
               )}
             </div>
-            
+
             {/* Solo mostrar resultados si no hay usuario seleccionado */}
             {!selectedUser && searchResults.length > 0 && (
               <div className="mt-2 max-h-32 overflow-y-auto bg-gray-800 rounded border border-gray-700">
@@ -109,7 +115,7 @@ const AddUserModal = ({
                 ))}
               </div>
             )}
-            
+
             {/* Usuario seleccionado */}
             {selectedUser && (
               <div className="mt-2 p-2 bg-blue-900 border border-blue-700 rounded">
@@ -121,7 +127,7 @@ const AddUserModal = ({
                 </div>
               </div>
             )}
-            
+
             {/* Estado de búsqueda - solo si no hay usuario seleccionado */}
             {!selectedUser && isSearching && (
               <div className="mt-2 text-gray-400 text-sm">
@@ -131,43 +137,50 @@ const AddUserModal = ({
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Puntos Totales</label>
+            <label className="block text-sm font-semibold mb-1">
+              {isEvent ? "Puntos del Evento" : "Puntos Totales"}
+            </label>
             <input
               type="number"
               className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
-              value={formData.totalPoints || ""}
-              onChange={(e) => handleInputChange("totalPoints", Number(e.target.value))}
+              value={formData.points || ""}
+              onChange={(e) => handleInputChange("points", Number(e.target.value))}
               placeholder="0"
               min="0"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Posición</label>
-            <input
-              type="number"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
-              value={formData.position || ""}
-              onChange={(e) => handleInputChange("position", Number(e.target.value))}
-              placeholder="0"
-              min="0"
-              required
-            />
-          </div>
+          {/* Campos adicionales solo para temporadas */}
+          {!isEvent && (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-1">Posición</label>
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  value={formData.position || ""}
+                  onChange={(e) => handleInputChange("position", Number(e.target.value))}
+                  placeholder="0"
+                  min="0"
+                  required
+                />
+              </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Última Posición</label>
-            <input
-              type="number"
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
-              value={formData.lastPosition || ""}
-              onChange={(e) => handleInputChange("lastPosition", Number(e.target.value))}
-              placeholder="0"
-              min="0"
-              required
-            />
-          </div>
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-1">Última Posición</label>
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  value={formData.lastPosition || ""}
+                  onChange={(e) => handleInputChange("lastPosition", Number(e.target.value))}
+                  placeholder="0"
+                  min="0"
+                  required
+                />
+              </div>
+            </>
+          )}
 
           <div className="flex gap-4 mt-6">
             <button
