@@ -133,6 +133,119 @@ const SeasonsDashboard = () => {
             + Agregar Usuario
           </button>
         </div>
+        
+        {/* Resumen de cambios de posición */}
+        {!loadingScores && scores.length > 0 && (
+          (() => {
+            const improvements = [];
+            const declines = [];
+            const unchanged = [];
+
+            scores.forEach(score => {
+              if (!score.lastPosition) {
+                unchanged.push(score);
+              } else if (score.position < score.lastPosition) {
+                improvements.push(score);
+              } else if (score.position > score.lastPosition) {
+                declines.push(score);
+              } else {
+                unchanged.push(score);
+              }
+            });
+
+            if (improvements.length > 0 || declines.length > 0) {
+              return (
+                <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Mejoras */}
+                  {improvements.length > 0 && (
+                    <div className="bg-green-900/30 border border-green-700 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-green-400 text-lg">↑</span>
+                        <h3 className="text-green-300 font-semibold">Subidas</h3>
+                        <span className="bg-green-700 text-green-200 text-xs px-2 py-1 rounded-full">
+                          {improvements.length}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {improvements.slice(0, 3).map(score => (
+                          <div key={score.userId} className="text-sm text-green-200">
+                            <span className="font-medium">{score.user.username}</span>
+                            <span className="text-green-300 ml-2">
+                              +{score.lastPosition - score.position} puesto{score.lastPosition - score.position > 1 ? 's' : ''}
+                            </span>
+                          </div>
+                        ))}
+                        {improvements.length > 3 && (
+                          <div className="text-xs text-green-400">
+                            +{improvements.length - 3} más...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bajadas */}
+                  {declines.length > 0 && (
+                    <div className="bg-red-900/30 border border-red-700 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-red-400 text-lg">↓</span>
+                        <h3 className="text-red-300 font-semibold">Bajadas</h3>
+                        <span className="bg-red-700 text-red-200 text-xs px-2 py-1 rounded-full">
+                          {declines.length}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {declines.slice(0, 3).map(score => (
+                          <div key={score.userId} className="text-sm text-red-200">
+                            <span className="font-medium">{score.user.username}</span>
+                            <span className="text-red-300 ml-2">
+                              -{score.position - score.lastPosition} puesto{score.position - score.lastPosition > 1 ? 's' : ''}
+                            </span>
+                          </div>
+                        ))}
+                        {declines.length > 3 && (
+                          <div className="text-xs text-red-400">
+                            +{declines.length - 3} más...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Sin cambios */}
+                  {unchanged.length > 0 && (
+                    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-gray-400 text-lg">→</span>
+                        <h3 className="text-gray-300 font-semibold">Sin cambios</h3>
+                        <span className="bg-gray-700 text-gray-200 text-xs px-2 py-1 rounded-full">
+                          {unchanged.length}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {unchanged.slice(0, 3).map(score => (
+                          <div key={score.userId} className="text-sm text-gray-300">
+                            <span className="font-medium">{score.user.username}</span>
+                            <span className="text-gray-400 ml-2">
+                              {score.lastPosition ? `Puesto ${score.position}` : 'Nuevo'}
+                            </span>
+                          </div>
+                        ))}
+                        {unchanged.length > 3 && (
+                          <div className="text-xs text-gray-400">
+                            +{unchanged.length - 3} más...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            return null;
+          })()
+        )}
+        
         {loadingScores ? (
           <div className="text-gray-400 italic">Cargando puntajes...</div>
         ) : scores.length === 0 ? (
@@ -152,18 +265,53 @@ const SeasonsDashboard = () => {
               <tbody>
                 {scores
                   .sort((a, b) => b.points - a.points)
-                  .map((score, index) => (
-                    <tr
-                      key={score.userId}
-                      className="border-b border-gray-700 hover:bg-gray-700/50"
-                    >
-                      <td className="px-4 py-2 font-bold">
-                        {((pagination.currentPage - 1) * pagination.pageSize) + index + 1}
-                      </td>
-                      <td className="px-4 py-2">{score.user.username}</td>
-                      <td className="px-4 py-2">{score.points}</td>
-                    </tr>
-                  ))}
+                  .map((score, index) => {
+                    const currentPosition = ((pagination.currentPage - 1) * pagination.pageSize) + index + 1;
+                    const lastPosition = score.lastPosition;
+                    const position = score.position;
+                    
+                    // Calcular cambio de posición
+                    let positionChange = null;
+                    if (lastPosition && position !== lastPosition) {
+                      const change = lastPosition - position;
+                      positionChange = {
+                        change: Math.abs(change),
+                        isImprovement: change > 0,
+                        arrow: change > 0 ? "↑" : "↓",
+                        color: change > 0 ? "text-green-400" : "text-red-400"
+                      };
+                    }
+                    
+                    return (
+                      <tr
+                        key={score.userId}
+                        className="border-b border-gray-700 hover:bg-gray-700/50"
+                      >
+                        <td className="px-4 py-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-lg">
+                              {currentPosition}
+                            </span>
+                            {positionChange && (
+                              <div className="flex items-center gap-1">
+                                <span className={`text-lg font-bold ${positionChange.color}`}>
+                                  {positionChange.arrow}
+                                </span>
+                                <span className={`text-sm ${positionChange.color}`}>
+                                  {positionChange.change}
+                                </span>
+                                <span className="text-xs text-gray-400">
+                                  ({lastPosition}→{position})
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2">{score.user.username}</td>
+                        <td className="px-4 py-2">{score.points}</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
             
