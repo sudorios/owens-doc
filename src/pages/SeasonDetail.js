@@ -1,7 +1,8 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import SeasonAside from "../components/SeasonAside";
 import SeasonScores from "../components/SeasonScores";
+import WinnersView from "../components/WinnersView";
 import UsersModal from "../components/modals/UsersModal";
 import AddUserModal from "../components/modals/AddUserModal";
 import CreateEventModal from "../components/modals/CreateEventModal";
@@ -15,15 +16,17 @@ import "../assets/css/hero.css";
 const SeasonDetail = () => {
   const { guildId, seasonId, eventId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const guildName = getGuildName();
+  const seasonName = getSeasonName();
 
-  const { 
-    events, 
-    loadingEvents, 
-    eventScore, 
-    loadingEventScore, 
+  const {
+    events,
+    loadingEvents,
+    eventScore,
+    loadingEventScore,
     seasonScores,
     loadingSeasonScores,
-    error,
     currentPage,
     pageSize,
     totalItems,
@@ -32,14 +35,12 @@ const SeasonDetail = () => {
     refreshEventScore,
     refreshSeasonScores,
     goToPage,
-    nextPage,
-    prevPage,
     changePageSize
   } = useEvents(seasonId, eventId, guildId);
-  
-  const { 
-    showUsersModal, 
-    showAddUserModal, 
+
+  const {
+    showUsersModal,
+    showAddUserModal,
     showEventModal,
     openUsersModal,
     closeUsersModal,
@@ -48,39 +49,53 @@ const SeasonDetail = () => {
     openEventModal,
     closeEventModal
   } = useModals();
-  
-  const { 
-    newEventName, 
-    setNewEventName, 
-    newEventState, 
-    setNewEventState, 
-    creatingEvent, 
+
+  const {
+    newEventName,
+    setNewEventName,
+    newEventState,
+    setNewEventState,
+    creatingEvent,
     handleCreateEvent,
-    resetForm 
+    resetForm
   } = useEventCreation(guildId, seasonId, refreshEvents);
-  
-  const { 
-    participants, 
-    loadingParticipants, 
+
+  const {
     formData,
     setFormData,
-    isSubmitting,
-    message,
     searchQuery,
-    setSearchQuery,
     searchResults,
     isSearching,
     selectedUser,
+    isSubmitting,
+    message,
     handleSearchUsers,
     handleSelectUser,
     clearSearch,
-    handleAddUser 
+    handleAddUser
   } = useUsers(guildId, seasonId, eventId);
 
-  const guildName = getGuildName();
-  const seasonName = getSeasonName();
+  // Determinar la vista actual basada en la URL
+  const isWinnersView = location.pathname.includes('/winners');
+  const isEventsView = location.pathname.includes('/events');
 
   const handleViewSeason = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
+  };
+
+  const handleShowEvents = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}/events`);
+  };
+
+  const handleShowWinners = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}/winners`);
+  };
+
+  const handleBackFromEvents = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
+  };
+
+  const handleBackFromWinners = () => {
     navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
   };
 
@@ -93,29 +108,95 @@ const SeasonDetail = () => {
   };
 
   const handleAddUserSubmit = async () => {
-    const success = await handleAddUser();
-    if (success) {
-      closeAddUserModal();
+    try {
       if (eventId) {
+        await handleAddUser();
         await refreshEventScore();
       } else {
+        await handleAddUser();
         await refreshSeasonScores();
       }
+      closeAddUserModal();
+    } catch (error) {
+      console.error("Error al agregar usuario:", error);
     }
   };
 
-  return (
-    <div className="hero-pt relative min-h-screen bg-[#1a132f] flex">
-      <SeasonAside
-        events={events}
-        loadingEvents={loadingEvents}
-        onCreateEvent={openEventModal}
-        onSelectEvent={(id) => navigate(`/dashboard/${guildId}/seasons/${seasonId}/${id}`)}
-        onManageUsers={openUsersModal}
-        onViewSeason={handleViewSeason}
-        seasonName={seasonName}
-      />
+  // Renderizar contenido principal
+  const renderMainContent = () => {
+    if (isEventsView) {
+      return (
+        <div>
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold text-gray-100">
+              Eventos de {seasonName || 'la Temporada'}
+            </h1>
+            <button
+              onClick={handleBackFromEvents}
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+            >
+              ← Volver
+            </button>
+          </div>
+          
+          {loadingEvents ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="mt-3 text-gray-400">Cargando eventos...</p>
+            </div>
+          ) : events.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-400 text-lg">No hay eventos en esta temporada</p>
+              <button
+                onClick={openEventModal}
+                className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+              >
+                Crear primer evento
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {events.map((event) => (
+                <div
+                  key={event.id}
+                  className="bg-gray-800 rounded-lg p-4 cursor-pointer hover:bg-gray-700 transition-all duration-200"
+                  onClick={() => {
+                    navigate(`/dashboard/${guildId}/seasons/${seasonId}/${event.id}`);
+                  }}
+                >
+                  <h3 className="font-semibold text-white text-lg mb-2">
+                    {event.name}
+                  </h3>
+                  {event.description && (
+                    <p className="text-gray-400 text-sm mb-3">
+                      {event.description}
+                    </p>
+                  )}
+                  <div className="text-xs text-gray-500">
+                    {event.startDate && (
+                      <p>Inicio: {new Date(event.startDate).toLocaleDateString('es-ES')}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
 
+    if (isWinnersView) {
+      return (
+        <WinnersView
+          guildId={guildId}
+          seasonId={seasonId}
+          onBack={handleBackFromWinners}
+          seasonName={seasonName}
+        />
+      );
+    }
+
+    return (
       <SeasonScores
         guildName={guildName}
         seasonName={seasonName}
@@ -124,7 +205,7 @@ const SeasonDetail = () => {
         seasonScores={seasonScores}
         loadingSeasonScores={loadingSeasonScores}
         hasEventId={!!eventId}
-        error={error}
+        error={null}
         onShowAddUser={openAddUserModal}
         currentPage={currentPage}
         pageSize={pageSize}
@@ -133,43 +214,65 @@ const SeasonDetail = () => {
         onPageChange={goToPage}
         onPageSizeChange={changePageSize}
       />
+    );
+  };
 
-      <UsersModal
-        isOpen={showUsersModal}
-        onClose={closeUsersModal}
-        participants={participants}
-        loadingParticipants={loadingParticipants}
+  return (
+    <div className="hero-pt relative min-h-screen bg-[#1a132f] flex">
+      <SeasonAside
+        onCreateEvent={openEventModal}
+        onManageUsers={openUsersModal}
+        onViewSeason={handleViewSeason}
+        onShowEvents={handleShowEvents}
+        onShowWinners={handleShowWinners}
+        seasonName={seasonName}
       />
+      
+      <main className="flex-1 p-10 text-white mt-20">
+        {renderMainContent()}
+      </main>
 
-      <AddUserModal
-        isOpen={showAddUserModal}
-        onClose={closeAddUserModal}
-        onSubmit={handleAddUserSubmit}
-        formData={formData}
-        setFormData={setFormData}
-        isSubmitting={isSubmitting}
-        message={message}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        searchResults={searchResults}
-        isSearching={isSearching}
-        selectedUser={selectedUser}
-        onSearchUsers={handleSearchUsers}
-        onSelectUser={handleSelectUser}
-        onClearSearch={clearSearch}
-        isEvent={!!eventId}
-      />
+      {showUsersModal && (
+        <UsersModal
+          isOpen={showUsersModal}
+          onClose={closeUsersModal}
+          events={events}
+          loadingEvents={loadingEvents}
+        />
+      )}
 
-      <CreateEventModal
-        isOpen={showEventModal}
-        onClose={closeEventModal}
-        onSubmit={handleCreateEventSubmit}
-        newEventName={newEventName}
-        setNewEventName={setNewEventName}
-        newEventState={newEventState}
-        setNewEventState={setNewEventState}
-        creatingEvent={creatingEvent}
-      />
+      {showAddUserModal && (
+        <AddUserModal
+          isOpen={showAddUserModal}
+          onClose={closeAddUserModal}
+          onSubmit={handleAddUserSubmit}
+          isEvent={!!eventId}
+          searchQuery={searchQuery}
+          searchResults={searchResults}
+          isSearching={isSearching}
+          selectedUser={selectedUser}
+          onSearchUsers={handleSearchUsers}
+          onSelectUser={handleSelectUser}
+          onClearSearch={clearSearch}
+          formData={formData}
+          setFormData={setFormData}
+          isSubmitting={isSubmitting}
+          message={message}
+        />
+      )}
+
+      {showEventModal && (
+        <CreateEventModal
+          isOpen={showEventModal}
+          onClose={closeEventModal}
+          onSubmit={handleCreateEventSubmit}
+          newEventName={newEventName}
+          setNewEventName={setNewEventName}
+          newEventState={newEventState}
+          setNewEventState={setNewEventState}
+          creatingEvent={creatingEvent}
+        />
+      )}
     </div>
   );
 };

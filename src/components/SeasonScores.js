@@ -28,7 +28,7 @@ const SeasonScores = ({
     : "No hay puntajes para esta temporada.";
 
   return (
-    <main className="flex-1 p-10 text-white mt-20">
+    <main className="flex-1 p-10 text-white">
       <div className="bg-gray-800 rounded-xl p-6 mb-8 flex flex-col md:flex-row md:items-center md:justify-between shadow-lg">
         <div className="flex flex-col md:flex-row md:items-center md:gap-12">
           <div>

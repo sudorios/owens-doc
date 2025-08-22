@@ -50,9 +50,6 @@ const ScoresTable = ({ scores, isLoading, emptyMessage, showPositionChanges = fa
             )}
             <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Usuario</th>
             <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Puntos</th>
-            {showPositionChanges && (
-              <th className="px-4 py-3 text-left text-gray-300 font-bold uppercase text-sm">Cambio</th>
-            )}
           </tr>
         </thead>
         <tbody>
@@ -66,8 +63,31 @@ const ScoresTable = ({ scores, isLoading, emptyMessage, showPositionChanges = fa
                   i % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
                 } hover:bg-gray-600 transition`}
               >
-                <td className="px-4 py-2 text-gray-200 font-medium">
-                  {showPositionChanges ? score.position : score.id}
+                <td className="px-4 py-2">
+                  {showPositionChanges ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-200 font-medium text-lg">
+                        {score.position}
+                      </span>
+                      {positionChange && (
+                        <div className="flex items-center gap-1">
+                          <span className={`text-lg font-bold ${positionChange.color}`}>
+                            {positionChange.arrow}
+                          </span>
+                          <span className={`text-sm ${positionChange.color}`}>
+                            {positionChange.change}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            ({score.lastPosition}→{score.position})
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-gray-200 font-medium">
+                      {score.id}
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-2 text-gray-100">
                   {score.user?.username || score.username || "Desconocido"}
@@ -75,27 +95,6 @@ const ScoresTable = ({ scores, isLoading, emptyMessage, showPositionChanges = fa
                 <td className="px-4 py-2 text-blue-400 font-bold">
                   {score.totalPoints || score.points || 0}
                 </td>
-                {showPositionChanges && (
-                  <td className="px-4 py-2">
-                    {positionChange ? (
-                      <div className="flex items-center gap-2">
-                        <span className={`text-lg font-bold ${positionChange.color}`}>
-                          {positionChange.arrow}
-                        </span>
-                        <span className={`text-sm ${positionChange.color}`}>
-                          {positionChange.change} puesto{positionChange.change > 1 ? 's' : ''}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          ({score.lastPosition} → {score.position})
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-gray-500 text-sm">
-                        {score.lastPosition ? "Sin cambios" : "Nuevo"}
-                      </span>
-                    )}
-                  </td>
-                )}
               </tr>
             );
           })}
