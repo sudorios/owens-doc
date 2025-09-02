@@ -25,7 +25,7 @@ const SeasonAside = ({
         onClick={onShowEvents}
         title="Ver todos los eventos de la temporada"
       >
-        📅 Eventos
+        Eventos
       </button>
       
       <button
@@ -33,7 +33,7 @@ const SeasonAside = ({
         onClick={onShowWinners}
         title="Ver ganadores de eventos"
       >
-        🏆 Ganadores
+        Ganadores
       </button>
       
       <button
@@ -42,17 +42,8 @@ const SeasonAside = ({
         title="Crear un nuevo evento"
       >
         + Nuevo evento
-      </button>
-      
+      </button>    
       <hr className="border-gray-700 my-4" />
-      
-      <button
-        className="mt-auto px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-semibold shadow transition-colors"
-        onClick={onManageUsers}
-        title="Gestionar usuarios de la temporada"
-      >
-        👥 Usuarios
-      </button>
     </aside>
   );
 };

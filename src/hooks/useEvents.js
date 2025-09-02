@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getEvents } from "../services/services";
+import { getEvents } from "../services/event";
 import { getSeasonScores } from "../services/seasonScore";
 import { getEventScore } from "../services/evenScore";
 

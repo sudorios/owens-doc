@@ -2,10 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { FaDiscord, FaGithub, FaBars, FaTimes, FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import owensIcon from "../assets/images/owens.png";
+import owensIcon from "../../assets/images/owens.png";
 
 import React, { useEffect } from "react";
-import { getUser } from "../services/user";
+import { getUser } from "../../services/user";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();

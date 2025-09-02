@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createEvent } from "../services/services";
+import { createEvent } from "../services/event";
 
 export const useEventCreation = (guildId, seasonId, onEventCreated) => {
   const [newEventName, setNewEventName] = useState("");

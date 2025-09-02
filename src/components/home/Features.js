@@ -1,6 +1,6 @@
-import owensMatch from '../assets/images/match.png';
-import owensRanking from '../assets/images/ranking.png';
-import owensRate from '../assets/images/rate.png';
+import owensMatch from '../../assets/images/match.png';
+import owensRanking from '../../assets/images/ranking.png';
+import owensRate from '../../assets/images/rate.png';
 import { useTranslation } from 'react-i18next';
 
 export default function FeatureSection() {

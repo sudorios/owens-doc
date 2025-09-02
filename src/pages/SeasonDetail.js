@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import SeasonAside from "../components/SeasonAside";
-import SeasonScores from "../components/SeasonScores";
-import WinnersView from "../components/WinnersView";
-import UsersModal from "../components/modals/UsersModal";
+import SeasonAside from "../components/dashboard/SeasonAside";
+import SeasonScores from "../components/dashboard/SeasonScores";
+import WinnersView from "../components/dashboard/WinnersView";
+import AccuracyPage from "../components/dashboard/AccuracyPage";
 import AddUserModal from "../components/modals/AddUserModal";
 import CreateEventModal from "../components/modals/CreateEventModal";
 import { useEvents } from "../hooks/useEvents";
@@ -39,11 +38,8 @@ const SeasonDetail = () => {
   } = useEvents(seasonId, eventId, guildId);
 
   const {
-    showUsersModal,
     showAddUserModal,
     showEventModal,
-    openUsersModal,
-    closeUsersModal,
     openAddUserModal,
     closeAddUserModal,
     openEventModal,
@@ -78,6 +74,7 @@ const SeasonDetail = () => {
   // Determinar la vista actual basada en la URL
   const isWinnersView = location.pathname.includes('/winners');
   const isEventsView = location.pathname.includes('/events');
+  const isAccuracyView = location.pathname.includes('/accuracy') && eventId;
 
   const handleViewSeason = () => {
     navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
@@ -91,6 +88,10 @@ const SeasonDetail = () => {
     navigate(`/dashboard/${guildId}/seasons/${seasonId}/winners`);
   };
 
+  const handleShowAccuracy = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}/${eventId}/accuracy`);
+  };
+
   const handleBackFromEvents = () => {
     navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
   };
@@ -98,6 +99,11 @@ const SeasonDetail = () => {
   const handleBackFromWinners = () => {
     navigate(`/dashboard/${guildId}/seasons/${seasonId}`);
   };
+
+  const handleBackFromAccuracy = () => {
+    navigate(`/dashboard/${guildId}/seasons/${seasonId}/${eventId}`);
+  };
+
 
   const handleCreateEventSubmit = async () => {
     const success = await handleCreateEvent();
@@ -196,6 +202,16 @@ const SeasonDetail = () => {
       );
     }
 
+    if (isAccuracyView) {
+      return (
+        <AccuracyPage
+          guildId={guildId}
+          eventId={eventId}
+          onBack={handleBackFromAccuracy}
+        />
+      );
+    }
+
     return (
       <SeasonScores
         guildName={guildName}
@@ -207,6 +223,7 @@ const SeasonDetail = () => {
         hasEventId={!!eventId}
         error={null}
         onShowAddUser={openAddUserModal}
+        onShowAccuracy={handleShowAccuracy}
         currentPage={currentPage}
         pageSize={pageSize}
         totalItems={totalItems}
@@ -221,7 +238,6 @@ const SeasonDetail = () => {
     <div className="hero-pt relative min-h-screen bg-[#1a132f] flex">
       <SeasonAside
         onCreateEvent={openEventModal}
-        onManageUsers={openUsersModal}
         onViewSeason={handleViewSeason}
         onShowEvents={handleShowEvents}
         onShowWinners={handleShowWinners}
@@ -232,14 +248,6 @@ const SeasonDetail = () => {
         {renderMainContent()}
       </main>
 
-      {showUsersModal && (
-        <UsersModal
-          isOpen={showUsersModal}
-          onClose={closeUsersModal}
-          events={events}
-          loadingEvents={loadingEvents}
-        />
-      )}
 
       {showAddUserModal && (
         <AddUserModal
