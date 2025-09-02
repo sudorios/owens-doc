@@ -1,5 +1,5 @@
-import owensIcon from '../assets/images/owens.png';
-import '../assets/css/hero.css'
+import owensIcon from '../../assets/images/owens.png';
+import '../../assets/css/hero.css'
 import { useTranslation } from 'react-i18next';
 
 export default function HeroSection() {

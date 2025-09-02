@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { syncGuilds as syncGuildsApi } from "../services/services";
+import { syncGuilds as syncGuildsApi } from "../services/season";
 import "../assets/css/hero.css";
 import { getUser } from "../services/user";
 import { getGuildsByUser } from "../services/guildUser";

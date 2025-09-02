@@ -1,7 +1,7 @@
-import FeatureSection from '../components/features';
-import HeroSection from '../components/heroSection';
-import FooterSection from '../components/footer';
-import ContactSection from '../components/contact';
+import FeatureSection from '../components/home/Features';
+import HeroSection from '../components/home/HeroSection';
+import FooterSection from '../components/layout/Footer';
+import ContactSection from '../components/home/Contact';
 
 export default function Home() {
     return (

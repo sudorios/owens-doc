@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { docsCategories } from '../docs/docsData.js';
-import FooterSection from '../components/footer';
+import FooterSection from '../components/layout/Footer';
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 

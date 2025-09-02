@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getSeasons, createSeason } from "../services/services";
+import { getSeasons, createSeason } from "../services/season";
 import { getScore, createGuildUser } from "../services/guildUser";
 import { searchUsers } from "../services/user";
 import "../assets/css/hero.css";

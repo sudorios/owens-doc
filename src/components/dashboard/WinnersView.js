@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getEventWinners } from '../services/eventWinner';
+import { getEventWinners } from '../../services/eventWinner';
 
 const WinnersView = ({ 
   guildId,  

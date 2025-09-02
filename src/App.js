@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import Navbar from './components/navbar';
-import LoadingSpinner from './components/loadingSpinner';
+import Navbar from './components/layout/Navbar';
+import LoadingSpinner from './components/common/LoadingSpinner';
 
 const Home = lazy(() => import('./pages/Home'));
 const Docs = lazy(() => import('./pages/docs'));
@@ -26,6 +26,7 @@ function App() {
           <Route path="/dashboard/users" element={<UsersDashboard />} />
           <Route path="/dashboard/:guildId/seasons" element={<SeasonsDashboard />} />
           <Route path="/dashboard/:guildId/seasons/:seasonId" element={<SeasonDetail />} />
+          <Route path="/dashboard/:guildId/seasons/:seasonId/:eventId/accuracy" element={<SeasonDetail />} />
           <Route path="/dashboard/:guildId/seasons/:seasonId/:eventId" element={<SeasonDetail />} />
           <Route path="/docs" element={<Docs />}>
             <Route index element={<Installation />} />

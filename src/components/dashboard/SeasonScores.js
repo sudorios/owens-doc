@@ -1,6 +1,6 @@
 import React from "react";
 import ScoresTable from "./ScoresTable";
-import Pagination from "./Pagination";
+import { Pagination } from '../common';
 import PositionChangeSummary from "./PositionChangeSummary";
 
 const SeasonScores = ({
@@ -13,6 +13,7 @@ const SeasonScores = ({
   hasEventId,
   error,
   onShowAddUser,
+  onShowAccuracy,
   currentPage,
   pageSize,
   totalItems,
@@ -44,13 +45,21 @@ const SeasonScores = ({
             </div>
           </div>
         </div>
-        <div className="flex gap-3 mt-6 md:mt-0">
-          <button
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg font-semibold shadow-md"
-            onClick={onShowAddUser}
-          >
-            + Usuario
-          </button>
+                 <div className="flex gap-3 mt-6 md:mt-0">
+           <button
+             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg font-semibold shadow-md"
+             onClick={onShowAddUser}
+           >
+             + Usuario
+           </button>
+           {hasEventId && onShowAccuracy && (
+             <button
+               className="px-4 py-2 bg-slate-600 hover:bg-slate-700 transition text-white rounded-lg font-semibold shadow-md"
+               onClick={onShowAccuracy}
+             >
+               % Precisión
+             </button>
+           )}
         </div>
       </div>
 
