@@ -1,32 +1,61 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaDiscord, FaGithub, FaBars, FaTimes, FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import owensIcon from "../../assets/images/owens.png";
 
 import React, { useEffect } from "react";
-import { getUser } from "../../services/user";
+import { authService } from "../../features/auth/service/auth.service";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isDashboard = location.pathname.startsWith("/dashboard");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getUser();
-        setUser(data);
-        if (data && data.id) {
-          localStorage.setItem("userId", data.id);
-        }
-      } catch (err) {
-        setUser(null);
+    const hash = window.location.hash;
+    if (hash.includes("access_token")) {
+      const urlParams = new URLSearchParams(hash.replace("#", "?"));
+      const discordToken = urlParams.get("access_token");
+
+      if (discordToken) {
+        // Limpia la URL para que no se vea el token y parezca un proceso interno
+        window.history.replaceState(null, "", window.location.pathname);
+        
+        authService.loginWithDiscord({ token: discordToken })
+          .then((res) => {
+            console.log("Login exitoso con tu API", res);
+            setUser(res);
+            navigate("/dashboard");
+          })
+          .catch(console.error);
       }
-    };
-    if (isDashboard) fetchUser();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDashboard) {
+      const localUserStr = localStorage.getItem("user_info");
+      if (localUserStr) {
+        try {
+          const localUser = JSON.parse(localUserStr);
+          const mappedUser = {
+            id: localUser.userId || localUser.id,
+            username: localUser.username,
+            avatar: localUser.avatarUrl || localUser.avatar
+          };
+          setUser(mappedUser);
+          if (mappedUser.id) {
+            localStorage.setItem("userId", mappedUser.id);
+          }
+        } catch (err) {
+          setUser(null);
+        }
+      }
+    }
   }, [isDashboard]);
 
   const toggleMenu = () => {
@@ -107,7 +136,7 @@ export default function Navbar() {
                     <FaGithub className="inline mr-1" /> Github
                   </a>
                   <a
-                    href="https://discord.com/oauth2/authorize?client_id=1372312475533316190&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify+email+guilds"
+                    href="https://discord.com/oauth2/authorize?client_id=1372312475533316190&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2F&response_type=token&scope=identify+email+guilds"
                     className="hover:text-green-400 transition flex items-center gap-1"
                   >
                     <FaUser className="inline" /> Login

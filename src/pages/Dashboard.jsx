@@ -1,64 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { syncGuilds as syncGuildsApi } from "../services/season";
+import { ArrowLeft, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import "../assets/css/hero.css";
-import { getUser } from "../services/user";
 import { getGuildsByUser } from "../services/guildUser";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [syncing, setSyncing] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
 
-  const fetchGuilds = async (userId) => {
-    return await getGuildsByUser(userId);
-  };
+  // Estados para búsqueda y paginación
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const limit = 10;
 
-  const syncGuilds = async () => {
-    if (syncing || cooldown > 0) return;
-
-    try {
-      setSyncing(true);
-      await syncGuildsApi();
-      const guilds = await fetchGuilds();
-      setUser({ ...user, guilds });
-      setCooldown(10);
-    } catch (err) {
-      if (err.response?.status === 429) {
-        alert("Estás haciendo demasiadas solicitudes. Espera unos segundos.");
-      } else {
-        console.error(err);
-        alert("Error sincronizando guilds.");
-      }
-    } finally {
-      setSyncing(false);
-    }
-  };
-
+  // Debounce para la búsqueda
   useEffect(() => {
-    if (cooldown <= 0) return;
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setCurrentPage(0); // Reiniciar a la primera página al buscar
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
-    const interval = setInterval(() => {
-      setCooldown((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [cooldown]);
+  const fetchGuilds = async (userId, start, query) => {
+    return await getGuildsByUser(userId, { start, limit, palabraClave: query });
+  };
 
   const fetchData = async () => {
+    let validUser = {
+      id: "mock_id_temporal",
+      username: "Usuario Invitado",
+      avatar: "https://cdn.discordapp.com/embed/avatars/0.png"
+    };
+
     try {
-      const me = await getUser();
-      let guilds = await fetchGuilds(me.id);
-      if (guilds.length === 0) {
-        guilds = await syncGuilds();
+      const localUserStr = localStorage.getItem("user_info");
+      if (localUserStr) {
+        try {
+          const localUser = JSON.parse(localUserStr);
+          validUser = {
+            id: localUser.userId || localUser.id,
+            username: localUser.username,
+            avatar: localUser.avatarUrl || localUser.avatar
+          };
+        } catch (e) {
+          console.error("Error al parsear user_info");
+        }
       }
+
+      let guildsData = { guilds: [], totalCount: 0 };
+      if (validUser.id !== "mock_id_temporal") {
+        try {
+          guildsData = await fetchGuilds(validUser.id, currentPage * limit, debouncedSearch);
+        } catch (err) {
+          console.error("La API de servidores falló:", err);
+        }
+      }
+
       setUser({
-        ...me,
-        guilds,
+        ...validUser,
+        guilds: guildsData.guilds || [],
       });
-    } catch (err) {
-      console.error(err);
+      setTotalCount(guildsData.totalCount);
     } finally {
       setLoading(false);
     }
@@ -66,7 +71,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage, debouncedSearch]);
 
   const navigate = useNavigate();
 
@@ -79,61 +84,95 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="hero-pt relative min-h-screen bg-[#1a132f] flex flex-col items-center pt-20">
-      <div className="w-11/12 max-w-6xl bg-[#241b3d] rounded-2xl shadow-lg p-8 mt-10">
-        <div className="w-full text-white py-4 px-8 flex items-center justify-between">
-          <span className="font-bold text-2xl">
-            Hola, selecciona un servidor
-          </span>
-          <div className="flex items-center gap-4">
+    <div className="flex flex-col items-center">
+      <div className="w-full max-w-6xl bg-gray-800 border border-gray-700 rounded-md shadow-lg p-8">
+        <div className="w-full text-white py-4 px-4 sm:px-8 flex flex-col gap-6">
+          {/* Header Dashboard */}
+          <div className="flex items-center justify-between border-b border-gray-700 pb-4">
+            <h1 className="font-bold text-2xl md:text-3xl text-white">
+              Selecciona tu servidor
+            </h1>
             <button
-              onClick={() => navigate("/dashboard/users")}
-              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium shadow transition-colors"
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
             >
-              Gestionar usuarios
-            </button>
-            <button
-              onClick={syncGuilds}
-              disabled={syncing || cooldown > 0}
-              className={`px-4 py-2 rounded font-medium transition-colors ${
-                syncing || cooldown > 0
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              {syncing
-                ? "Syncing..."
-                : cooldown > 0
-                ? `Wait ${cooldown}s`
-                : "Sincronizar servidores"}
+              <ArrowLeft className="w-4 h-4" /> Volver al inicio
             </button>
           </div>
+
+          {/* Controles de la página */}
+          <div className="flex flex-col md:flex-row items-center justify-between mt-2 gap-4">
+            <div className="relative w-full md:w-96">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar servidor por nombre..."
+                className="w-full bg-gray-900 border border-gray-700 text-sm rounded-md pl-10 pr-4 py-2 focus:outline-none focus:border-blue-500 transition-colors text-gray-200"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        <hr className="border-gray-600/50 mb-4" />
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {user.guilds.map((guild) => {
-            const iconUrl =
-              guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
-            return (
-              <div
-                key={guild.id}
-                className="flex flex-col items-center"
-                onClick={() => {
-                  localStorage.setItem("guildName", guild.name);
-                  navigate(`/dashboard/${guild.guildId}/seasons`);
-                }}
-              >
-                <img
-                  src={iconUrl}
-                  alt={guild.name}
-                  className="w-20 h-20 rounded-full border-2 border-gray-700 shadow-md cursor-pointer hover:scale-105 transition-transform duration-200"
-                />
-                <span className="text-white mt-2 text-sm text-center">
-                  {guild.name}
-                </span>
-              </div>
-            );
-          })}
+
+        {/* Grilla de Servidores */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 sm:px-8 mt-6">
+          {user?.guilds && user.guilds.length > 0 ? (
+            user.guilds.map((guild) => {
+              const iconUrl = guild.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
+              return (
+                <div
+                  key={guild.id}
+                  className="flex flex-col items-center group cursor-pointer bg-gray-900 border border-gray-700 hover:border-blue-500 rounded-md p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                  onClick={() => {
+                    localStorage.setItem("guildName", guild.name);
+                    navigate(`/dashboard/${guild.guildId}/seasons`);
+                  }}
+                >
+                  <img
+                    src={iconUrl}
+                    alt={guild.name}
+                    className="w-20 h-20 rounded-md border border-gray-700 group-hover:scale-110 transition-transform duration-300 object-cover bg-gray-800"
+                  />
+                  <span className="text-gray-200 group-hover:text-blue-400 mt-4 text-sm text-center font-bold transition-colors line-clamp-1">
+                    {guild.name}
+                  </span>
+                </div>
+              );
+            })
+          ) : (
+            <div className="col-span-full py-20 text-center text-gray-500">
+              <p className="text-lg">No se encontraron servidores</p>
+              {debouncedSearch && <p className="text-sm mt-2">Intenta con otra palabra clave</p>}
+            </div>
+          )}
+        </div>
+
+        {/* Paginación (Siempre visible) */}
+        <div className="flex items-center justify-center gap-4 mt-10 pb-8">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+            disabled={currentPage === 0}
+            className={`p-2 rounded-md border transition-colors ${currentPage === 0
+                ? "border-gray-800 text-gray-700 cursor-not-allowed"
+                : "border-gray-700 text-gray-300 hover:bg-gray-800"
+              }`}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <span className="text-gray-400 text-sm font-medium">
+            Página {currentPage + 1} de {Math.max(1, Math.ceil(totalCount / limit))}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => prev + 1)}
+            disabled={(currentPage + 1) * limit >= totalCount}
+            className={`p-2 rounded-md border transition-colors ${(currentPage + 1) * limit >= totalCount
+                ? "border-gray-800 text-gray-700 cursor-not-allowed"
+                : "border-gray-700 text-gray-300 hover:bg-gray-800"
+              }`}
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </div>

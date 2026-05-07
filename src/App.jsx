@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import Navbar from './components/layout/Navbar';
+import MainLayout from './components/layout/MainLayout';
+import DashboardLayout from './components/layout/DashboardLayout';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 const Home = lazy(() => import('./pages/Home'));
@@ -23,27 +24,33 @@ const UsersDashboard = lazy(() => import('./features/users/pages/users-page').th
 function App() {
   return (
     <Router>
-      <Navbar />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/users" element={<UsersDashboard />} />
-          <Route path="/dashboard/:guildId/seasons" element={<SeasonsDashboard />} />
-          <Route path="/dashboard/:guildId/seasons/:seasonId" element={<SeasonLayout />}>
-            <Route index element={<SeasonScoresPage />} />
-            <Route path="events" element={<EventsPage />} />
-            <Route path="winners" element={<WinnersPage />} />
-            <Route path=":eventId" element={<EventDetailPage />} />
-            <Route path=":eventId/accuracy" element={<AccuracyPage />} />
+          {/* Rutas Públicas con Navbar */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/docs" element={<Docs />}>
+              <Route index element={<Installation />} />
+              <Route path="installation" element={<Installation />} />
+              <Route path="help" element={<Help />} />
+              <Route path="create-pools" element={<CreatePools />} />
+              <Route path="seasons" element={<Seasons />} />
+              <Route path="create-rate" element={<Rate />} />
+            </Route>
           </Route>
-          <Route path="/docs" element={<Docs />}>
-            <Route index element={<Installation />} />
-            <Route path="installation" element={<Installation />} />
-            <Route path="help" element={<Help />} />
-            <Route path="create-pools" element={<CreatePools />} />
-            <Route path="seasons" element={<Seasons />} />
-            <Route path="create-rate" element={<Rate />} />
+
+          {/* Rutas de Administración con Sidebar */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<UsersDashboard />} />
+            <Route path=":guildId/seasons" element={<SeasonsDashboard />} />
+            <Route path=":guildId/seasons/:seasonId" element={<SeasonLayout />}>
+              <Route index element={<SeasonScoresPage />} />
+              <Route path="events" element={<EventsPage />} />
+              <Route path="winners" element={<WinnersPage />} />
+              <Route path=":eventId" element={<EventDetailPage />} />
+              <Route path=":eventId/accuracy" element={<AccuracyPage />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>
@@ -51,4 +58,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;
