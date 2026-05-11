@@ -2,6 +2,7 @@ import { api } from "@/core/api";
 import { User, UserFormData, PaginatedResponse } from "@/domain/models/user.model";
 
 export const userService = {
+
   getUsers: async (page = 1, pageSize = 10): Promise<PaginatedResponse<User>> => {
     const res = await api.get("/api/user", {
       params: { page, pageSize },
@@ -13,7 +14,7 @@ export const userService = {
     const res = await api.post("/api/user", data);
     return res.data.data;
   },
-  
+
   getUser: async (): Promise<User | null> => {
     try {
       const res = await api.get("/api/auth/me");

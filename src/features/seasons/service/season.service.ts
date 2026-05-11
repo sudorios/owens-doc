@@ -3,9 +3,28 @@ import { Season, SeasonFormData, SeasonScore, GuildUser } from "@/domain/models/
 import { PaginatedResponse } from "@/domain/models/user.model";
 
 export const seasonService = {
-  getSeasons: async (guildId: string): Promise<Season[]> => {
-    const res = await api.get(`/api/season?guildId=${guildId}`);
-    return Array.isArray(res.data) ? res.data : (res.data.data || []);
+  getSeasons: async (guildId: string, page = 1, pageSize = 10, palabraClave = "", filters: any = {}): Promise<PaginatedResponse<Season>> => {
+    const start = (page - 1) * pageSize;
+    const body = {
+      start,
+      limit: pageSize,
+      sort: filters.sort || "",
+      guildId: Number(guildId),
+      palabraClave,
+      ...filters
+    };
+    const res = await api.post(`/api/season/find`, body);
+    return {
+      data: (res.data?.elements || []).map((s: any) => ({
+        ...s,
+        id: s.seasonId,
+        guild: typeof s.guild === 'string' ? { name: s.guild } : s.guild
+      })),
+      total: res.data?.totalCount || 0,
+      page,
+      pageSize,
+      totalPages: Math.ceil((res.data?.totalCount || 0) / pageSize),
+    };
   },
 
   createSeason: async (data: SeasonFormData): Promise<Season> => {
@@ -13,11 +32,28 @@ export const seasonService = {
     return res.data;
   },
 
-  getSeasonScores: async (guildId: string, seasonId: string, page = 1, pageSize = 10): Promise<PaginatedResponse<SeasonScore>> => {
-    const res = await api.get(`/api/guild/${guildId}/season/${seasonId}/scores`, {
-      params: { page, pageSize },
-    });
-    return res.data;
+  getSeasonScores: async (guildId: string, seasonId: string, page = 1, pageSize = 10, palabraClave = "", filters = {}): Promise<PaginatedResponse<SeasonScore>> => {
+    const start = (page - 1) * pageSize;
+    const body = {
+      start,
+      limit: pageSize,
+      sort: filters.sort || "",
+      seasonId: Number(seasonId),
+      palabraClave,
+      ...filters
+    };
+    const res = await api.post(`/api/season/findSeasonScore`, body);
+    return {
+      data: (res.data?.elements || []).map((s: any) => ({
+        ...s,
+        id: s.seasonScoreId,
+        user: { username: s.username, userId: s.userDcId }
+      })),
+      total: res.data?.totalCount || 0,
+      page,
+      pageSize,
+      totalPages: Math.ceil((res.data?.totalCount || 0) / pageSize),
+    };
   },
 
   createSeasonScore: async (data: any): Promise<any> => {

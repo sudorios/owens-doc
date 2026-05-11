@@ -15,26 +15,7 @@ export default function Navbar() {
   const isDashboard = location.pathname.startsWith("/dashboard");
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash.includes("access_token")) {
-      const urlParams = new URLSearchParams(hash.replace("#", "?"));
-      const discordToken = urlParams.get("access_token");
 
-      if (discordToken) {
-        // Limpia la URL para que no se vea el token y parezca un proceso interno
-        window.history.replaceState(null, "", window.location.pathname);
-        
-        authService.loginWithDiscord({ token: discordToken })
-          .then((res) => {
-            console.log("Login exitoso con tu API", res);
-            setUser(res);
-            navigate("/dashboard");
-          })
-          .catch(console.error);
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (isDashboard) {

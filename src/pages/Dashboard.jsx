@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Search, ChevronLeft, ChevronRight, RefreshCw, AlertCircle } from "lucide-react";
 import "../assets/css/hero.css";
 import { getGuildsByUser } from "../services/guildUser";
+import { useDiscordSync } from "../hooks/useDiscordSync";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +14,24 @@ const Dashboard = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const limit = 10;
+
+  // Hook para sincronización asíncrona
+  const { isSyncing } = useDiscordSync(
+    user?.userId,
+    () => {
+      console.log("Sincronización completada, refrescando...");
+      setSuccess("¡Servidores sincronizados con éxito!");
+      setTimeout(() => setSuccess(null), 5000);
+      fetchData();
+    },
+    (errMsg) => {
+      setError(errMsg);
+      setTimeout(() => setError(null), 5000);
+    }
+  );
 
   // Debounce para la búsqueda
   useEffect(() => {
@@ -41,7 +59,8 @@ const Dashboard = () => {
         try {
           const localUser = JSON.parse(localUserStr);
           validUser = {
-            id: localUser.userId || localUser.id,
+            id: localUser.id,
+            userId: localUser.userId,
             username: localUser.username,
             avatar: localUser.avatarUrl || localUser.avatar
           };
@@ -51,9 +70,9 @@ const Dashboard = () => {
       }
 
       let guildsData = { guilds: [], totalCount: 0 };
-      if (validUser.id !== "mock_id_temporal") {
+      if (validUser.userId) {
         try {
-          guildsData = await fetchGuilds(validUser.id, currentPage * limit, debouncedSearch);
+          guildsData = await fetchGuilds(validUser.userId, currentPage * limit, debouncedSearch);
         } catch (err) {
           console.error("La API de servidores falló:", err);
         }
@@ -113,6 +132,36 @@ const Dashboard = () => {
               />
             </div>
           </div>
+          {/* Notificación de Error */}
+          {error && (
+            <div className="mx-4 sm:px-4 mt-4 bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-md flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
+
+          {/* Notificación de Éxito */}
+          {success && (
+            <div className="mx-4 sm:px-4 mt-4 bg-green-500/20 border border-green-500/50 text-green-200 px-4 py-3 rounded-md flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+              <RefreshCw className="w-5 h-5 flex-shrink-0" />
+              <p className="text-sm">{success}</p>
+            </div>
+          )}
+
+          {/* Estado de Sincronización */}
+          {isSyncing && (
+            <div className="mx-4 sm:px-8 mt-6">
+              <div className="bg-blue-600/20 border border-blue-500/30 rounded-md p-6 flex flex-col items-center justify-center text-center gap-4 animate-pulse">
+                <RefreshCw className="w-10 h-10 text-blue-400 animate-spin" />
+                <div>
+                  <h3 className="text-lg font-bold text-white">Sincronizando servidores...</h3>
+                  <p className="text-gray-400 text-sm mt-1">
+                    Estamos actualizando tu lista de servidores con Discord. Esto tomará solo un momento.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Grilla de Servidores */}
@@ -126,7 +175,7 @@ const Dashboard = () => {
                   className="flex flex-col items-center group cursor-pointer bg-gray-900 border border-gray-700 hover:border-blue-500 rounded-md p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                   onClick={() => {
                     localStorage.setItem("guildName", guild.name);
-                    navigate(`/dashboard/${guild.guildId}/seasons`);
+                    navigate(`/dashboard/${guild.id}/seasons`);
                   }}
                 >
                   <img
@@ -142,8 +191,21 @@ const Dashboard = () => {
             })
           ) : (
             <div className="col-span-full py-20 text-center text-gray-500">
-              <p className="text-lg">No se encontraron servidores</p>
-              {debouncedSearch && <p className="text-sm mt-2">Intenta con otra palabra clave</p>}
+              {isSyncing ? (
+                <div className="flex flex-col items-center gap-4">
+                  <div className="flex gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                  </div>
+                  <p className="text-lg">Buscando tus servidores en Discord...</p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-lg">No se encontraron servidores</p>
+                  {debouncedSearch && <p className="text-sm mt-2">Intenta con otra palabra clave</p>}
+                </>
+              )}
             </div>
           )}
         </div>

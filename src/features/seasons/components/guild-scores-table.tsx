@@ -27,11 +27,9 @@ export const GuildScoresTable = ({ data, isLoading, page, pageSize }: GuildScore
       id: "position",
       header: "Posición",
       cell: ({ row }: any) => {
-        const index = row.index;
         const score = row.original;
-        const currentPosition = ((page - 1) * pageSize) + index + 1;
         const lastPosition = score.lastPosition;
-        const position = score.position;
+        const position = score.position || (((page - 1) * pageSize) + row.index + 1);
         
         let positionChange = null;
         if (lastPosition && position !== lastPosition) {
@@ -45,9 +43,9 @@ export const GuildScoresTable = ({ data, isLoading, page, pageSize }: GuildScore
         }
 
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2">
             <span className="font-bold text-lg text-gray-200">
-              {currentPosition}
+              {position}
             </span>
             {positionChange ? (
               <div className="flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded-full border border-gray-800">
@@ -82,7 +80,7 @@ export const GuildScoresTable = ({ data, isLoading, page, pageSize }: GuildScore
   ];
 
   const table = useReactTable({
-    data: [...data].sort((a, b) => b.points - a.points),
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -96,13 +94,13 @@ export const GuildScoresTable = ({ data, isLoading, page, pageSize }: GuildScore
   }
 
   return (
-    <div className="rounded-xl border border-gray-800 bg-[#111] overflow-hidden shadow-xl">
-      <Table>
-        <TableHeader className="bg-gray-900/80">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="border-gray-800 hover:bg-transparent">
+    <div className="rounded-xl border border-gray-700 bg-gray-800 overflow-hidden shadow-xl">
+          <Table>
+            <TableHeader className="bg-gray-700/50">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="border-b border-gray-700 hover:bg-transparent">
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="text-gray-400 font-semibold py-4">
+                <TableHead key={header.id} className="text-gray-300 font-semibold py-4 text-center">
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -117,12 +115,12 @@ export const GuildScoresTable = ({ data, isLoading, page, pageSize }: GuildScore
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="border-gray-800 hover:bg-gray-800/50 transition-colors"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-3">
+                <TableRow
+                  key={row.id}
+                  className="border-gray-700 hover:bg-gray-700/50 transition-colors"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="py-3 text-center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

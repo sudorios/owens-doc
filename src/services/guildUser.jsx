@@ -65,7 +65,7 @@ export async function getGuildsByUser(userId, { start = 0, limit = 10, palabraCl
         id: g.guildId,
         guildId: g.guildDcId,
         name: g.guild,
-        avatar: null 
+        avatar: g.url 
       })),
       totalCount
     };

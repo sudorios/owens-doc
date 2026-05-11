@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { seasonService } from "../service/season.service";
 import { SeasonFormData } from "@/domain/models/season.model";
 
-export const useGetSeasonsQuery = (guildId: string) => {
+export const useGetSeasonsQuery = (guildId: string, page: number, pageSize: number, palabraClave: string = "", filters: any = {}) => {
   return useQuery({
-    queryKey: ["seasons", guildId],
-    queryFn: () => seasonService.getSeasons(guildId),
+    queryKey: ["seasons", guildId, page, pageSize, palabraClave, filters],
+    queryFn: () => seasonService.getSeasons(guildId, page, pageSize, palabraClave, filters),
     enabled: !!guildId,
   });
 };
@@ -29,10 +29,10 @@ export const useGetGuildScoresQuery = (guildId: string, page: number, pageSize: 
   });
 };
 
-export const useGetSeasonScoresQuery = (guildId: string, seasonId: string, page: number, pageSize: number) => {
+export const useGetSeasonScoresQuery = (guildId: string, seasonId: string, page: number, pageSize: number, palabraClave: string = "", filters: any = {}) => {
   return useQuery({
-    queryKey: ["seasonScores", guildId, seasonId, page, pageSize],
-    queryFn: () => seasonService.getSeasonScores(guildId, seasonId, page, pageSize),
+    queryKey: ["seasonScores", guildId, seasonId, page, pageSize, palabraClave, filters],
+    queryFn: () => seasonService.getSeasonScores(guildId, seasonId, page, pageSize, palabraClave, filters),
     enabled: !!guildId && !!seasonId,
   });
 };
